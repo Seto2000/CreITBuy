@@ -1,0 +1,69 @@
+﻿<section class="py-5">
+    <div class="container">
+        <h1 style="margin: 2%; text-align: center;">Register</h1>
+        <div style="padding: 5%;">
+            <form method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Username">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" placeholder="Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-group mb-3">
+                        <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword" placeholder="Confirm Password">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="userJob">I am a:</label>
+                    <select class="form-control" id="userJob">
+                        <option value="null">--> Select Job <--</option>
+                        <option value="artist">Artist</option>
+                        <option value="developer">Developer</option>
+                        <option value="writer">Writer</option>
+                        <option value="produser">Produser</option>
+                        <option value="photographer">Photographer</option>
+                        <option value="client">Client</option>
+                </select>
+                </div>
+                <div class="form-group">
+                    <p>Already have account? <a href="/User/Login">Login Now!</a></p>
+                </div>
+                <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
+            </form>
+        </div>
+    </div>
+</section>
