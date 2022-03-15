@@ -162,6 +162,10 @@ namespace CreITBuy.Infrastructure.Data.Common
             return await this.Context.SaveChangesAsync();
         }
 
+        public void Add<T>(T entity) where T : class
+        {
+            DbSet<T>().Add(entity);
+        }
         /// <summary>
         /// Updates a record in database
         /// </summary>

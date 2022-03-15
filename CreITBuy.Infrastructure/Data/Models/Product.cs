@@ -23,12 +23,11 @@ namespace CreITBuy.Infrastructure.Data.Models
         [StringLength(1000)]
         public string Description { get; set; }
         [Required]
-        [DataType("image")]
+        [Column(TypeName = "image")]
         public byte[] Image { get; set; }
         [Required]
         [Range(0,100000)]
         public decimal Price { get; set; }
-        public ICollection<Cart> Carts { get; set; }
         public DateTime PostedOn { get; set; }
     }
 }

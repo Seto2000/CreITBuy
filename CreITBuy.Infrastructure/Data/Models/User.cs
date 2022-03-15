@@ -25,18 +25,18 @@ namespace CreITBuy.Infrastructure.Data.Models
         public Jobs Job { get; set; }
 
         [Required]
+        [Column(TypeName ="image")]
+        public byte[] Image { get; set; }
+        [Required]
         [StringLength(36)]
         public string CartId { get; set; }
         [Required]
-        [DataType("image")]
-        public byte[] Image { get; set; }
-        [Required]
         [ForeignKey(nameof(CartId))]
         public Cart Cart { get; set; }
-        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-        public ICollection<Card> Cards { get; set; } = new List<Card>();
-        public ICollection<JobRequest> JobRequests { get; set; } = new List<JobRequest>();
-        public ICollection<Product> Products { get; set; } = new List<Product>();
+        public IList<Notification> Notifications { get; set; } = new List<Notification>();
+        public IList<Card> Cards { get; set; } = new List<Card>();
+        public IList<UserJobRequest> UserJobRequests { get; set; } = new List<UserJobRequest>();
+        public IList<Product> Products { get; set; } = new List<Product>();
 
     }
 }

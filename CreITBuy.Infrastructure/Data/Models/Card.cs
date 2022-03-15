@@ -26,7 +26,8 @@ namespace CreITBuy.Infrastructure.Data.Models
         [StringLength(64)]
         public string Cvc { get; set; }
         [Required]
-        public DateOnly ValidThru { get; set; }
+        [Column(TypeName ="date")]
+        public DateTime ValidThru { get; set; }
 
     }
 }

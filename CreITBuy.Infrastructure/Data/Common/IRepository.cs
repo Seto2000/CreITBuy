@@ -92,6 +92,7 @@ namespace CreITBuy.Infrastructure.Data.Common
         /// </summary>
         /// <returns>Error code</returns>
         int SaveChanges();
+        void Add<T>(T entity) where T : class;
         Task<int> SaveChangesAsync();
     }
 }
