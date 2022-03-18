@@ -1,7 +1,11 @@
-﻿using CreITBuy.Models;
+﻿using CreITBuy.Core.ViewModels.User;
+using CreITBuy.Infrastructure.Data.Models;
+using CreITBuy.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
-
+using System.Security.Claims;
+#nullable disable
 namespace CreITBuy.Controllers
 {
     public class HomeController : Controller
@@ -13,8 +17,25 @@ namespace CreITBuy.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(IndexViewModel user)
         {
+            if(TempData["user"] != null)
+            {
+                user = JsonConvert.DeserializeObject<IndexViewModel>((string)TempData["user"]);
+                ViewData["user"] = user;
+                ViewData["UserImage"] = user.Image;
+                ViewData["Username"] = user.Username;
+                ViewData["Job"] = user.Job;
+            }
+            if(ViewData["user"] == null)
+            {
+                ViewData["IsAuthenticated"] = false;
+            }
+            else
+            {
+                ViewData["IsAuthenticated"] = true;
+
+            }
             return View();
         }
 

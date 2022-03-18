@@ -1,69 +1,79 @@
-﻿<section class="py-5">
+﻿@model CreITBuy.Core.ViewModels.User.RegisterViewModel
+
+<section class="py-5">
+
     <div class="container">
         <h1 style="margin: 2%; text-align: center;">Register</h1>
         <div style="padding: 5%;">
-            <form method="post">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                            <span class="fas fa-user"></span>
-                            </div>
-                        </div>
-                    </div>
+            
+
                 </div>
-                <div class="form-group">
-                    <label for="email">Email address</label>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Email">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword" placeholder="Confirm Password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                  <form method="post" asp-controller="User" asp-action="Register" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                  <div class="form-group">
-                    <label for="userJob">I am a:</label>
-                    <select class="form-control" id="userJob">
-                        <option value="null">--> Select Job <--</option>
-                        <option value="artist">Artist</option>
-                        <option value="developer">Developer</option>
-                        <option value="writer">Writer</option>
-                        <option value="produser">Produser</option>
-                        <option value="photographer">Photographer</option>
-                        <option value="client">Client</option>
-                </select>
+                     <div class="preview">
+                    <img id="file-ip-1-preview">
                 </div>
+                <label asp-for="Image" class="control-label"></label>
+                <input type="file" asp-for="Image" accept="image/*" name="fileObj" onchange="showPreview(event);"/>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <script type="text/javascript">
+   
+              function showPreview(event){
+              if(event.target.files.length > 0){
+                var src = URL.createObjectURL(event.target.files[0]);
+                var preview = document.getElementById("file-ip-1-preview");
+                preview.src = src;
+                preview.style.display = "block";
+              }
+            }
+            </script>
+            
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword" class="control-label"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Job" class="control-label"></label>
+                <select asp-for="Job">
+                        <option value=null>--> Select Job <--</option>
+                        <option value="Artist">Artist</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Writer">Writer</option>
+                        <option value="Producer">Producer</option>
+                        <option value="Photographer">Photographer</option>
+                        <option value="Client">Client</option>
+                </select>
+                <span asp-validation-for="Job" class="text-danger"></span>
+            </div>
+    
+               
                 <div class="form-group">
                     <p>Already have account? <a href="/User/Login">Login Now!</a></p>
                 </div>
                 <button type="submit" class="btn btn-primary text-uppercase">Submit</button>
+
             </form>
+
         </div>
-    </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 </section>

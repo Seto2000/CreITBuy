@@ -1,4 +1,6 @@
-﻿using CreITBuy.Infrastructure.Data.Repositoryes;
+﻿using CreITBuy.Core.Contracts;
+using CreITBuy.Core.Services;
+using CreITBuy.Infrastructure.Data.Repositoryes;
 using CreITBuy.Infrastructures.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +11,8 @@ namespace CreITBuy.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
-
+            services.AddScoped<IValidationService, ValidationService>();
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
 

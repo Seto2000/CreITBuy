@@ -2,6 +2,10 @@
 using CreITBuy.Core.ViewModels.User;
 using CreITBuy.Infrastructure.Data.Common;
 using CreITBuy.Infrastructure.Data.Models;
+using CreITBuy.Infrastructure.Data.Models.Enums;
+using CreITBuy.Infrastructures.Data;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +18,13 @@ namespace CreITBuy.Core.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository repo;
+
+        private readonly ApplicationDbContext repo;
 
         private readonly IValidationService validationService;
 
         public UserService(
-            IRepository _repo,
+            ApplicationDbContext _repo,
             IValidationService _validationService
             )
         {
@@ -29,34 +34,32 @@ namespace CreITBuy.Core.Services
 
         public string GetUsername(string userId)
         {
-            return repo.All<User>()
+            return repo.Users
                 .FirstOrDefault(u => u.Id == userId)?.Username;
         }
 
-        public string Login(LoginViewModel model)
+        public User Login(LoginViewModel model)
         {
-            var user = repo.All<User>()
-                .Where(u => u.Email == model.Email)
-                .Where(u => u.Password == CalculateHash(model.Password))
-                .SingleOrDefault();
-
-            return user?.Id;
+            User user = repo.Users
+                .SingleOrDefault(u=>u.Email == model.Email 
+                && u.Password == CalculateHash(model.Password));
+            return user;
         }
 
-        public (bool registered, string error) Register(RegisterViewModel model)
+        public async Task<(bool registered, string error)> RegisterAsync(RegisterViewModel model,IFormFile fileObj)
         {
             bool registered = false;
             string error = string.Empty;
 
             var (isValid, validationError) = validationService.ValidateModel(model);
-
+            
 
             if (!isValid)
             {
                 return (isValid, validationError);
             }
-
-            if (repo.All<User>().Any(u => u.Email == model.Email || u.Username == model.Username))
+          
+            if (repo.Users.Any(u => u.Email == model.Email || u.Username == model.Username))
             {
                 validationError = "Unexpected error!";
 
@@ -66,18 +69,27 @@ namespace CreITBuy.Core.Services
             Cart cart = new Cart();
             User user = new User()
             {
-                Image = model.Image,
+                
                 Username = model.Username,
                 Email = model.Email,
                 Password = CalculateHash(model.Password),
+                Job = (Jobs)Enum.Parse(typeof(Jobs), model.Job),
                 Cart = cart,
                 CartId = cart.Id
             };
-
+            if (fileObj.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    await fileObj.CopyToAsync(ms);
+                    var fileBytes = ms.ToArray();
+                    user.Image = fileBytes;
+                }
+            }
             try
             {
-                repo.Add(user);
-                repo.SaveChanges();
+                await repo.AddAsync(user);
+                await repo.SaveChangesAsync();
                 registered = true;
             }
             catch (Exception)

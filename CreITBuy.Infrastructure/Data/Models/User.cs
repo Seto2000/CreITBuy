@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 #nullable disable
 namespace CreITBuy.Infrastructure.Data.Models
 {
-    public class User
+    public class User 
     {
         [Key]
         [StringLength(36)]

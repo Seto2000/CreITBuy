@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+using System.Web;
 #nullable disable
 namespace CreITBuy.Core.ViewModels.User
 {
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "{0} is required!")]
-        public byte[] Image { get; set; }
+
+        public string Image { get; set; }
         [Required(ErrorMessage ="{0} is required!")]
         [StringLength(20, MinimumLength = 5, ErrorMessage = "{0} must be between {2} and {1} characters!")]
         public string Username { get; set; }
@@ -21,5 +23,8 @@ namespace CreITBuy.Core.ViewModels.User
 
         [Compare(nameof(Password), ErrorMessage = "{1} and {0} must be equal!")]
         public string ConfirmPassword { get; set; }
+        [Required(ErrorMessage = "{0} is required!")]
+        public string Job { get; set; }
+
     }
 }

@@ -6,6 +6,7 @@
         Developer,
         Writer,
         Producer,
-        Photographer
+        Photographer,
+        Client
     }
 }
