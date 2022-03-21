@@ -16,8 +16,33 @@ html {
 body {
     margin-bottom: 60px;
 }
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0,0,0,.5);
+    margin-top: 10px;
+}
+.main-header .navbar-nav .nav-item {
+    margin: 0;
+    height: 60px;
+}
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: 0.5px;
+    margin-left: -7.5px;
+}
+
+#footer {
+    margin-bottom: -62px;
+}
+#nav1 {
+    background-color: #d02328;
+    color: #fff;
+}
 div.content-wrapper {
-    background-color: #adb5bd;
+    background-image: url("../img/creITbue_backgroung.png");
+    background-size: cover;
 }
 div.navbar-nav{
     resize:horizontal;
@@ -67,4 +92,11 @@ div.nav-sidebar .nav-item > .nav-link {
 .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
     background-color: #007bff;
     color: #fff;
+}
+#sidebar {
+    margin-bottom: 0px;
+    min-height: 100%;
+    position: absolute;
+    top: 0;
+    height: 1296px;
 }

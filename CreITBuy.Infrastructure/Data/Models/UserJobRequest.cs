@@ -11,7 +11,6 @@ namespace CreITBuy.Infrastructure.Data.Models
     public class UserJobRequest
     {
         [Required]
-        [StringLength(36)]
         public string UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }

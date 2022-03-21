@@ -6,28 +6,41 @@ using CreITBuy.Infrastructure.Data.Models.Enums;
 using CreITBuy.Infrastructures.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 #nullable disable
 namespace CreITBuy.Core.Services
 {
     public class UserService : IUserService
     {
-
+        private readonly IEmailSender emailSender;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
         private readonly ApplicationDbContext repo;
 
         private readonly IValidationService validationService;
 
-        public UserService(
+        public UserService(SignInManager<User> _signInManager,
+
+            IEmailSender _emailSender,
+            UserManager<User> _userManager,
             ApplicationDbContext _repo,
             IValidationService _validationService
             )
         {
+            emailSender = _emailSender;
+            userManager = _userManager;
+            signInManager = _signInManager;
             repo = _repo;
             validationService = _validationService;
         }
@@ -35,69 +48,61 @@ namespace CreITBuy.Core.Services
         public string GetUsername(string userId)
         {
             return repo.Users
-                .FirstOrDefault(u => u.Id == userId)?.Username;
+                .FirstOrDefault(u => u.Id == userId)?.UserName;
         }
-
-        public User Login(LoginViewModel model)
+        public void SignOut()
         {
-            User user = repo.Users
-                .SingleOrDefault(u=>u.Email == model.Email 
-                && u.Password == CalculateHash(model.Password));
-            return user;
+            signInManager.SignOutAsync();
         }
-
-        public async Task<(bool registered, string error)> RegisterAsync(RegisterViewModel model,IFormFile fileObj)
+        public async Task<(User, SignInResult,IndexViewModel)> LoginAsync(LoginViewModel Input)
         {
-            bool registered = false;
-            string error = string.Empty;
+            var result = await signInManager.PasswordSignInAsync(Input.Email,
+                                   Input.Password, false, false);
+            var user = await userManager.FindByEmailAsync(Input.Email);
 
-            var (isValid, validationError) = validationService.ValidateModel(model);
-            
-
-            if (!isValid)
+            if (user != null)
             {
-                return (isValid, validationError);
+                await signInManager.SignInAsync(user, isPersistent: false);
+
+
+                var indexModel = new IndexViewModel()
+                {
+                    Id = user.Id,
+                    Username = user.UserName,
+                    Email = user.Email,
+                    Job = user.Job.ToString(),
+                    Image = user.Image,
+
+                };
+                return (user, result, indexModel);
             }
-          
-            if (repo.Users.Any(u => u.Email == model.Email || u.Username == model.Username))
-            {
-                validationError = "Unexpected error!";
+            return (null, result, null);
+        }
+        public async Task<(User,string,IdentityResult)> RegisterAsync(IFormFile fileObj, RegisterViewModel Input)
+        {
 
-                return (false, validationError);
-            }
-
-            Cart cart = new Cart();
-            User user = new User()
-            {
-                
-                Username = model.Username,
-                Email = model.Email,
-                Password = CalculateHash(model.Password),
-                Job = (Jobs)Enum.Parse(typeof(Jobs), model.Job),
-                Cart = cart,
-                CartId = cart.Id
-            };
             if (fileObj.Length > 0)
             {
                 using (var ms = new MemoryStream())
                 {
                     await fileObj.CopyToAsync(ms);
                     var fileBytes = ms.ToArray();
-                    user.Image = fileBytes;
+                    Input.Image = fileBytes;
                 }
             }
-            try
+            var user = new User { UserName = Input.Username, Email = Input.Email, Image = Input.Image, Cart = new Cart(), Job = (Jobs)Enum.Parse(typeof(Jobs), Input.Job) };
+            var result = await userManager.CreateAsync(user, Input.Password);
+            if (result.Succeeded)
             {
-                await repo.AddAsync(user);
-                await repo.SaveChangesAsync();
-                registered = true;
-            }
-            catch (Exception)
-            {
-                error = "Could not save user in DB";
-            }
 
-            return (registered, error);
+                var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                return (user,code,result);
+            }
+            
+                return(null,null,result);
+            
+
         }
 
         private string CalculateHash(string password)

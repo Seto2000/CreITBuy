@@ -1,14 +1,13 @@
 ﻿
 <!DOCTYPE html>
 <html dir="ltr" lang="bg">
-<head>
   <meta charset="utf-8" />
   <!-- v20924 -->
 
   <title>Политика за поверителност  &ndash; Помощ</title>
 
   
-
+  
   <meta name="description" content="CreITBuy  България – Декларация за поверителност Последно обновена на 13 март ,2022. Предишната версия на Декларацията за поверителност е..." /><meta property="og:image" content="https://theme.zdassets.com/theme_assets/537336/4aa93903b7fd0e716e0de5402a5bfcb4fbc05541.svg" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Помощ" />
@@ -29,50 +28,11 @@
 
 
 
-<style type='text/css'>
-    .embeddedServiceHelpButton .helpButton .uiButton {
-        background-color: #24e5db;
-        font-family: "Arial", sans-serif;
-    }
-    .embeddedServiceHelpButton .helpButton .uiButton:focus {
-        outline: 1px solid #24e5db;
-        }   
-    #liveAgentClientChat #waitingMessage { display: none; } 
-    .offlinebutton{ 
-        display: none;  
-    }
-</style>
 
 
 
-<script>
-    console.info("---=== Version 08 ===---");
-    function getCookieByName(name) {
-        var b = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-        return b ? b.pop() : null;
-    }
-    var refreshToken = getCookieByName("refresh_token");
-    
-    if (refreshToken !== null) {
-    
-        if (sessionStorage.getItem("last_refresh_token") !== refreshToken) {
-            sessionStorage.clear();
-            sessionStorage.setItem("last_refresh_token", refreshToken);
-        }
-        
-        if (Number(sessionStorage.getItem("sso_checked")) < 3) {
-            sessionStorage.setItem(
-                "sso_checked",
-                Number(sessionStorage.getItem("sso_checked")) + 1
-            );
-          	console.info("Querying SSO...");
-            location = "https://www.CreITBuy.bg/" + "account/zendesksso/?nativeMode=1&return_to=" + location.href;
-        } else {
-            sessionStorage.setItem("phone_reg", true);
-            console.info("Phone registered account.");
-        }
-    }
-</script>
+
+
 
 
 
@@ -80,28 +40,10 @@
 
 
   
-<script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
-<body class="">
-  
-  
-
-  <a class="skip-navigation" tabindex="1" href="#main-content">Прескачане към основното съдържание</a>
-
-
-<header class="header--margin"></header>
 
 
 
 
-<script>
-  (function () {
-    var header = new Headroom(document.querySelector("#main-nav-header"), {
-      offset: 72,
-      tolerance: 5
-    });
-    header.init();
-  }());
-</script>
 
 
 
@@ -126,8 +68,9 @@
        
       </div>
       
-    </aside>
-
+    </aside></div></div>
+   
+    
     <article id="main-content" class="article">
       <header class="article-header">
         <h1 title="Политика за поверителност 13/03/2022" class="article-title">
@@ -153,8 +96,7 @@
         <div class="article-subscribe"><div data-helper="subscribe" data-json="{&quot;item&quot;:&quot;article&quot;,&quot;url&quot;:&quot;/hc/bg/articles/360000904709-%D0%9F%D0%BE%D0%BB%D0%B8%D1%82%D0%B8%D0%BA%D0%B0-%D0%B7%D0%B0-%D0%BF%D0%BE%D0%B2%D0%B5%D1%80%D0%B8%D1%82%D0%B5%D0%BB%D0%BD%D0%BE%D1%81%D1%82-05-02-2021/subscription.json&quot;,&quot;follow_label&quot;:&quot;Абониране&quot;,&quot;unfollow_label&quot;:&quot;Прекратяване на следенето&quot;,&quot;following_label&quot;:&quot;Следи&quot;,&quot;can_subscribe&quot;:true,&quot;is_subscribed&quot;:false}"></div></div>
         
       </header>
-
-      <section class="article-info">
+          <section class="article-info">
         <div class="article-content">
           <div class="article-body"><p><strong>CreITBuy&nbsp; България – Декларация за поверителност</strong></p>
 <p><em><span>Последно обновена на 5 февруари ,2021. Предишната версия на Декларацията за поверителност е достъпна <a href="/hc/bg/articles/360009033458" target="_self">тук</a>.&nbsp;</span></em></p>
@@ -435,5 +377,5 @@
     </article>
   </div>
 </div>
-  </body>
+  
 </html>

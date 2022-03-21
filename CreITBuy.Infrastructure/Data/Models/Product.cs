@@ -14,7 +14,6 @@ namespace CreITBuy.Infrastructure.Data.Models
         [StringLength(100)]
         public string Name { get; set; }
         [Required]
-        [StringLength(36)]
         public string AuthorId { get; set; }
         [Required]
         [ForeignKey(nameof(AuthorId))]

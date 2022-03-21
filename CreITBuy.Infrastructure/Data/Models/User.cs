@@ -1,25 +1,20 @@
 ﻿using CreITBuy.Infrastructure.Data.Models.Enums;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 namespace CreITBuy.Infrastructure.Data.Models
 {
-    public class User 
+    public class User:IdentityUser
     {
-        [Key]
-        [StringLength(36)]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        [StringLength(20)]
-        [Required]
-        public string Username { get; set; }
-        [EmailAddress]
-        [StringLength(300)]
-        [Required]
-        public string Email { get; set; }
-        [StringLength(64)]
-        [Required]
-        public string Password { get; set; }
+        public User()
+        {
+        }
+
+        
+    
+       
         [StringLength(15)]
         [Required]
         public Jobs Job { get; set; }

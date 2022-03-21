@@ -7,7 +7,7 @@ namespace CreITBuy.Core.ViewModels.User
     public class RegisterViewModel
     {
 
-        public string Image { get; set; }
+        public byte[] Image { get; set; }
         [Required(ErrorMessage ="{0} is required!")]
         [StringLength(20, MinimumLength = 5, ErrorMessage = "{0} must be between {2} and {1} characters!")]
         public string Username { get; set; }

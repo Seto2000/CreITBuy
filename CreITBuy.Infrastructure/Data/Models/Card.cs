@@ -14,7 +14,6 @@ namespace CreITBuy.Infrastructure.Data.Models
         [StringLength(100)]
         public string CardholderName { get; set; }
         [Required]
-        [StringLength(36)]
         public string UserId { get; set; }
         [Required]
         [ForeignKey(nameof(UserId))]

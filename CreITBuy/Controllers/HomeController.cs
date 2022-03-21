@@ -1,6 +1,8 @@
 ﻿using CreITBuy.Core.ViewModels.User;
 using CreITBuy.Infrastructure.Data.Models;
 using CreITBuy.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -10,24 +12,52 @@ namespace CreITBuy.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ILogger<HomeController> logger;
+        private readonly UserManager<User> userManager;
+        public HomeController(ILogger<HomeController> _logger, UserManager<User> _userManager)
         {
-            _logger = logger;
+            this.logger = _logger;
+            userManager = _userManager;
+        }
+        public async Task<IActionResult> Index()
+        {
+            ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
+            ViewData["viewName"] = "Index";
+            ViewData["controlerName"] = "Home";
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                if (TempData["user"] != null)
+                {
+                    var user = JsonConvert.DeserializeObject<IndexViewModel>((string)TempData["user"]);
+                    ViewData["user"] = user;
+                    ViewData["UserImage"] = user.Image;
+                    ViewData["Username"] = user.Username;
+                    ViewData["Job"] = user.Job;
+                }
+                else
+                {
+                    User user = await userManager.FindByNameAsync(User.Identity.Name);
+                    var indexModel = new IndexViewModel()
+                    {
+                        Id = user.Id,
+                        Username = user.UserName,
+                        Email = user.Email,
+                        Job = user.Job.ToString(),
+                        Image = user.Image,
+
+                    };
+                    ViewData["UserImage"] = user.Image;
+                    ViewData["Username"] = user.UserName;
+                    ViewData["Job"] = user.Job;
+                }
+            }
+          
+            return View();
         }
 
-        public IActionResult Index(IndexViewModel user)
+        public IActionResult Privacy()
         {
-            if(TempData["user"] != null)
-            {
-                user = JsonConvert.DeserializeObject<IndexViewModel>((string)TempData["user"]);
-                ViewData["user"] = user;
-                ViewData["UserImage"] = user.Image;
-                ViewData["Username"] = user.Username;
-                ViewData["Job"] = user.Job;
-            }
-            if(ViewData["user"] == null)
+            if (ViewData["user"] == null)
             {
                 ViewData["IsAuthenticated"] = false;
             }
@@ -36,11 +66,6 @@ namespace CreITBuy.Controllers
                 ViewData["IsAuthenticated"] = true;
 
             }
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
             return View();
         }
 

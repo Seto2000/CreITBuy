@@ -17,7 +17,7 @@ namespace CreITBuy.Infrastructures.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -45,8 +45,7 @@ namespace CreITBuy.Infrastructures.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ValidThru")
                         .HasColumnType("date");
@@ -135,8 +134,7 @@ namespace CreITBuy.Infrastructures.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -153,8 +151,7 @@ namespace CreITBuy.Infrastructures.Migrations
 
                     b.Property<string>("AuthorId")
                         .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -183,48 +180,6 @@ namespace CreITBuy.Infrastructures.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("CartId")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<byte[]>("Image")
-                        .IsRequired()
-                        .HasColumnType("image");
-
-                    b.Property<int>("Job")
-                        .HasMaxLength(15)
-                        .HasColumnType("int");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.UserJobRequest", b =>
                 {
                     b.Property<string>("JobRequestId")
@@ -232,8 +187,7 @@ namespace CreITBuy.Infrastructures.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("UserId")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("JobRequestId", "UserId");
 
@@ -306,6 +260,10 @@ namespace CreITBuy.Infrastructures.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -357,6 +315,8 @@ namespace CreITBuy.Infrastructures.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -444,6 +404,35 @@ namespace CreITBuy.Infrastructures.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.User", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("CartId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("image");
+
+                    b.Property<int>("Job")
+                        .HasMaxLength(15)
+                        .HasColumnType("int");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasIndex("CartId")
+                        .IsUnique()
+                        .HasFilter("[CartId] IS NOT NULL");
+
+                    b.HasDiscriminator().HasValue("User");
+                });
+
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Card", b =>
                 {
                     b.HasOne("CreITBuy.Infrastructure.Data.Models.User", "User")
@@ -490,17 +479,6 @@ namespace CreITBuy.Infrastructures.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.User", b =>
-                {
-                    b.HasOne("CreITBuy.Infrastructure.Data.Models.Cart", "Cart")
-                        .WithOne("User")
-                        .HasForeignKey("CreITBuy.Infrastructure.Data.Models.User", "CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
                 });
 
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.UserJobRequest", b =>
@@ -571,6 +549,17 @@ namespace CreITBuy.Infrastructures.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.User", b =>
+                {
+                    b.HasOne("CreITBuy.Infrastructure.Data.Models.Cart", "Cart")
+                        .WithOne("User")
+                        .HasForeignKey("CreITBuy.Infrastructure.Data.Models.User", "CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
                 });
 
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Cart", b =>
