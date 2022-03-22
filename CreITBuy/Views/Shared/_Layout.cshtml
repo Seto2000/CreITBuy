@@ -70,11 +70,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
-      <li class="nav-item">
+                @if ((bool)ViewData["IsAuthenticated"])
+                {
+                         <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
         </a>
-        <div class="navbar-search-block">
+        <div class="navbar-search-block" id="search">
           <form class="form-inline">
             <div class="input-group input-group-sm">
               <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
@@ -90,6 +92,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </form>
         </div>
       </li>
+                }
+           
 
       <!-- Notifications Dropdown Menu -->
       
@@ -155,11 +159,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
+            <a b-undt220x7a="" href="../User/Login" class="nav-link" style="
+                background-color: #e31e24;
+                color: white;">
+              <i b-undt220x7a="" class="nav-icon fas fa-th"></i>
+              <p b-undt220x7a="">
+                LogIn
               </p>
             </a>
           </li>
@@ -213,10 +218,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <footer id="footer" class="main-footer">
     <!-- To the right -->
     <div class="float-right d-none d-sm-inline">
-      Anything you want
+      Anything is here, wating for you!
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2014-@DateTime.Now.Year <a href="/">CreITBuy.com</a>.</strong> All rights reserved.
   </footer>
 
 <!-- ./wrapper -->
