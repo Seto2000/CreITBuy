@@ -1,8 +1,121 @@
-﻿@{
+﻿@using CreITBuy.Infrastructure.Data.Models
+@{
     ViewData["Title"] = "Home Page";
 }
+@if (!(bool)ViewData["IsAuthenticated"])
+{
+    <div class="row">
+    <div class="jumbotron col-md-12" background-color="none">
+        <div class="heading-container bottom-buffer-md">
+            <h1 >Welcome to CreITBuy Platform!</h1>
+        </div>
+        <h3><a class="SMS-bg-color" href="../User/Login">Login</a> to use the Platform.</h3>
+        <h3 ><a class="SMS-bg-color" href="../User/Register">Register</a> if you don't have an account.</h3>
+    </div>
+    </div>
+}
+else
+{
+        <div class="jumbotron col-md-12" background-color="none">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+        <div class="heading-container bottom-buffer-md">
+            <h1>Welcome to CreITBuy Platform!</h1>
+            <h3>Here you can buy all you want!</h3>
+            <h3>Take a look.</h3>
+        </div>
+        </div>
+
+
+        
+            
+               List<Product> products = ViewData["Products"] as List<Product>;
+        foreach(var product in products)
+        {
+            <div class="card" id="products">
+    <div class="offer-wrapper">
+                <table width="100%" cellspacing="0" cellpadding="0" class="fixed breakword promoted-list ad_id8HhEk" summary="Oбява" data-id="128526640">
+            <tbody>
+            <tr>
+                                <td width="150" rowspan="2" class="photo-cell">
+                    <a class="thumb vtop inlblk rel tdnone linkWithHash linkWithHashPromoted scale4 detailsLinkPromoted "
+                       href="https://www.olx.bg/d/ad/geymarski-kompyutar-i7-3770-gtx-745-2gb-8ram-500hdd-CID632-ID8HhEk.html#0ff18c5435;promoted" title=""  >
+                                                    <span class="inlblk icon paid type2 abs zi2" title="Промотирана обява"></span>
+
+
+                            
+                        
+                    </a>
+                </td>
+                                                <td  valign="top" class="title-cell ">
+                <div class="space rel">
+                    <h3 class="lheight22 margintop5">
+                        
+
+
+                        <a
+                            href="https://www.olx.bg/d/ad/geymarski-kompyutar-i7-3770-gtx-745-2gb-8ram-500hdd-CID632-ID8HhEk.html#0ff18c5435;promoted"
+                            class="marginright5 link linkWithHash detailsLinkPromoted linkWithHashPromoted"                              data-cy="listing-ad-title"
+                        >
+                        <strong>Геймърски компютър / i7 3770/ GTX 745 2gb/ 8ram/500hdd</strong>
+                        </a>
+                    </h3>
+
+                                        <p class="offer-path color-9 lheight16 margintop5">
+                        <small class="breadcrumb x-normal">
+                                                        Компютри » Настолни компютри
+                                                    </small>
+                    </p>
+                                        </div>
+                    </td>
+                    <td width="200" class="wwnormal tright td-price" valign="top">
+                    <div class="space inlblk rel">
+                        
+                                                
+                                                <p class="price">
+                            <strong>599 лв.</strong>
+                        </p>
+                        
+                                                                                                                        
+                        
+                                            </div>
+
+                                                                                </td>
+            </tr>
+            <tr>
+                <td valign="bottom" class="bottom-cell">
+                    <div class="space rel">
+                        <p class="lheight16">
+                            <small class="breadcrumb x-normal">
+                                <span><i data-icon="location-filled"></i>гр. София, Център</span>
+                            </small>
+                            <small class="breadcrumb x-normal">
+                                <span><i data-icon="clock"></i>19  мар</span>
+                            </small>
+                                                    </p>
+                                            </div>
+                </td>
+                <td width="85" class="tright" valign="bottom">
+                    <div class="rel">
+                                                <div class="rel observelinkinfo inlblk zi3">
+                            <a href="#" class="{id:128526640} observe-link inlblk lheight16 tdnone tcenter margintop5 vishid " data-statkey="ad.observed.list">
+                                <span class="icon inlblk observe2 observed-128526640" data-icon="star"></span>
+                                <span class="link x-small gray2 block lheight14">
+										<span>  </span>
+									</span>
+                            </a>
+                            <div class="suggesttitleright small top abs zi2 br4 hidden">
+                                <p></p>
+                            </div>
+                        </div>
+                                            </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+        }
+        }
+
+}
+

@@ -194,5 +194,10 @@ namespace CreITBuy.Infrastructure.Data.Common
             var entities = All<T>(deleteWhereClause);
             DeleteRange(entities);
         }
+
+        public void Remove<T>(T entity) where T : class
+        {
+            this.DbSet<T>().Remove(entity);
+        }
     }
 }

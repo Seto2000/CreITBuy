@@ -46,19 +46,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
       @if (!Convert.ToBoolean(ViewData["isAuthenticated"]) || ViewData["isAuthenticated"]==null)
                 {
                     <li class="nav-item d-none d-sm-inline-block">
-                      <a href="/User/Login" class="nav-link"><font size="4">Login</font></a>
+                      <a href="../User/Login" class="nav-link"><font size="4">Login</font></a>
                     </li>
                 
          
 
                     <li class="nav-item d-none d-sm-inline-block">
-                     <a href="/User/Register" class="nav-link"><font size="4">Register</font></a>
+                     <a href="../User/Register" class="nav-link"><font size="4">Register</font></a>
                     </li>
                 }
                 else
                 {
                      <li class="nav-item d-none d-sm-inline-block">
-                     <a href="User/Logout" class="nav-link"><font size="4">Logout</font></a>
+                     <a href="../User/Logout" class="nav-link"><font size="4">Logout</font></a>
+                    </li>
+
+                    <li class="nav-item d-none d-sm-inline-block">
+                     <a href="../Product/AddProduct" class="nav-link"><font size="4">Add Product</font></a>
                     </li>
                 }
             </ul>
@@ -87,7 +91,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </li>
 
-      
       <!-- Notifications Dropdown Menu -->
       
       <li class="nav-item">
@@ -175,7 +178,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">@ViewData["viewName"]</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">

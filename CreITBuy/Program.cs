@@ -6,6 +6,7 @@ using CreITBuy.Infrastructure.Data.Models;
 using System.Net;
 using CreITBuy.Core.Contracts;
 using CreITBuy.Core.Services;
+using CreITBuy.Infrastructure.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,10 @@ builder.Services.AddDistributedMemoryCache()
     options.IdleTimeout = TimeSpan.FromMinutes(1);
 });
 // Add framework services.
-builder.Services.AddScoped<IUserService,UserService>().AddScoped<IValidationService,ValidationService>();
+builder.Services.AddScoped<IUserService,UserService>()
+    .AddScoped<IValidationService,ValidationService>()
+    .AddScoped<IRepo, Repo>()
+    .AddScoped<IProductService,ProductService>();
 builder.Services.AddMvc();
 builder.Services.Configure<IdentityOptions>(options =>
 {

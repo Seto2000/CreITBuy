@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CreITBuy.Infrastructure.Data.Repositoryes
 {
-    public interface IApplicationDbRepository : IRepository
+    public interface IApplicationDbRepository : IRepo
     {
     }
 }
