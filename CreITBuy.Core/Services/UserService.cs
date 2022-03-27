@@ -54,34 +54,24 @@ namespace CreITBuy.Core.Services
         {
             signInManager.SignOutAsync();
         }
-        public async Task<(User, SignInResult,IndexViewModel)> LoginAsync(LoginViewModel Input)
+        public async Task<(User, SignInResult)> LoginAsync(LoginViewModel Input)
         {
-            var result = await signInManager.PasswordSignInAsync(Input.Email,
-                                   Input.Password, false, false);
             var user = await userManager.FindByEmailAsync(Input.Email);
+            var result = await signInManager.PasswordSignInAsync(user,
+                                   Input.Password, false, false);
 
             if (user != null)
             {
                 await signInManager.SignInAsync(user, isPersistent: false);
 
-
-                var indexModel = new IndexViewModel()
-                {
-                    Id = user.Id,
-                    Username = user.UserName,
-                    Email = user.Email,
-                    Job = user.Job.ToString(),
-                    Image = user.Image,
-
-                };
-                return (user, result, indexModel);
+                return (user, result);
             }
-            return (null, result, null);
+            return (null, result);
         }
         public async Task<(User,string,IdentityResult)> RegisterAsync(IFormFile fileObj, RegisterViewModel Input)
         {
 
-            if (fileObj.Length > 0)
+            if (fileObj!=null)
             {
                 using (var ms = new MemoryStream())
                 {
@@ -90,7 +80,15 @@ namespace CreITBuy.Core.Services
                     Input.Image = fileBytes;
                 }
             }
-            var user = new User { UserName = Input.Username, Email = Input.Email, Image = Input.Image, Cart = new Cart(), Job = (Jobs)Enum.Parse(typeof(Jobs), Input.Job) };
+            var user = new User 
+            { 
+                UserName = Input.Username,
+                Email = Input.Email,
+                Image = Input.Image,
+                Cart = new Cart(),
+                Job = (Jobs)Enum.Parse(typeof(Jobs), Input.Job),
+                LockoutEnabled = false
+            };
             var result = await userManager.CreateAsync(user, Input.Password);
             if (result.Succeeded)
             {
@@ -113,6 +111,11 @@ namespace CreITBuy.Core.Services
             {
                 return Convert.ToBase64String(sha256.ComputeHash(passworArray));
             }
+        }
+
+        public (bool isValid, string errors) ValidateModel(RegisterViewModel input)
+        {
+            return validationService.ValidateModel(input);
         }
     }
 }

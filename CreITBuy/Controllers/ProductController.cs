@@ -50,8 +50,56 @@ namespace CreITBuy.Controllers
             }
             else
             {
+                ViewData["Errors"] = new List<string>
+                    (errors.Split(";",StringSplitOptions.RemoveEmptyEntries)
+                    .ToList());
                 return View("Error",errors);
             }
+        }
+        [Authorize]
+        public async Task<IActionResult> AllProducts()
+        {
+            ViewData["viewName"] = "All";
+            ViewData["controlerName"] = "Products";
+            ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
+
+            ViewData["Products"] = new List<Product>(productService.All());
+            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            //var indexModel = new IndexViewModel()
+            //{
+            //    Id = user.Id,
+            //    Username = user.UserName,
+            //    Email = user.Email,
+            //    Job = user.Job.ToString(),
+            //    Image = user.Image,
+
+            //};
+            ViewData["UserImage"] = user.Image;
+            ViewData["Username"] = user.UserName;
+            ViewData["Job"] = user.Job;
+            return View();
+        }
+
+        public async Task<IActionResult> Details()
+        {
+            ViewData["viewName"] = "Details";
+            ViewData["controlerName"] = "Products";
+            ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
+            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            //var indexModel = new IndexViewModel()
+            //{
+            //    Id = user.Id,
+            //    Username = user.UserName,
+            //    Email = user.Email,
+            //    Job = user.Job.ToString(),
+            //    Image = user.Image,
+
+            //};
+            ViewData["UserImage"] = user.Image;
+            ViewData["Username"] = user.UserName;
+            ViewData["Job"] = user.Job;
+
+            return View();
         }
 
     }

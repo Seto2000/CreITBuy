@@ -39,8 +39,9 @@ namespace CreITBuy.Core.Services
                     AuthorId= user.Id,
                     PostedOn = model.PostedOn,
                     Price= model.Price,
-                    Image= model.Image
+                    Images=new List<Image>() { new Image() {ImageData= model.Image } }
                 };
+                product.Images.First().Product = product;
                 try
                 {
                     repo.Add<Product>(product);

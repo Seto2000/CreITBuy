@@ -70,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
-                @if ((bool)ViewData["IsAuthenticated"])
+                @if (true||(bool)ViewData["IsAuthenticated"])
                 {
                          <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
@@ -121,7 +121,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <img  id="ItemPreview" class="img-circle elevation-2"  src="@("data:image/png;base64," + Convert.ToBase64String((byte[])ViewData["UserImage"]))">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><font size="5.5">@ViewData["Username"]</font></a>
+          <a href="#" class="d-block"><font size="5">@ViewData["Username"]</font></a>
           <a class="d-block">@ViewData["Job"]</a>
         </div>
       </div>
@@ -135,39 +135,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" id="nav1" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Starter Pages
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link active">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Active Page</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inactive Page</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+
           <li class="nav-item">
             <a b-undt220x7a="" href="../User/Login" class="nav-link" style="
-                background-color: #e31e24;
+                background-color: #d02328;
                 color: white;">
-              <i b-undt220x7a="" class="nav-icon fas fa-th"></i>
+            <div id="nav-items-text">
+              <i b-undt220x7a="" class="fas fa-user"></i>
               <p b-undt220x7a="">
-                LogIn
+                &nbsp;&nbsp;&nbsp; Log In
               </p>
+              </div>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a b-undt220x7a="" href="../User/Register" class="nav-link" style="
+                background-color: #d02328;
+                color: white;">
+            <div id="nav-items-text">
+              <i b-undt220x7a="" class="fas fa-user-plus"></i>
+              <p b-undt220x7a="">
+                &nbsp; Register
+              </p>
+              </div>
+            </a>
+          </li>
+
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

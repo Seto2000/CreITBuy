@@ -279,6 +279,7 @@ button:not(:disabled),
 [type="reset"]:not(:disabled),
 [type="submit"]:not(:disabled) {
   cursor: pointer;
+  visibility:hidden;
 }
 
 button::-moz-focus-inner,

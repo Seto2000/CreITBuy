@@ -8,13 +8,7 @@ namespace CreITBuy.Infrastructure.Data.Models
 {
     public class User:IdentityUser
     {
-        public User()
-        {
-        }
-
         
-    
-       
         [StringLength(15)]
         [Required]
         public Jobs Job { get; set; }

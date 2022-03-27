@@ -22,7 +22,7 @@ namespace CreITBuy.Controllers
             userManager = _userManager;
             productService = _productService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             ViewData["Products"] = new List<Product>(productService.All());
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
@@ -30,30 +30,7 @@ namespace CreITBuy.Controllers
             ViewData["controlerName"] = "Home";
             if (HttpContext.User.Identity.IsAuthenticated)
             {
-                if (TempData["user"] != null)
-                {
-                    var user = JsonConvert.DeserializeObject<IndexViewModel>((string)TempData["user"]);
-                    ViewData["user"] = user;
-                    ViewData["UserImage"] = user.Image;
-                    ViewData["Username"] = user.Username;
-                    ViewData["Job"] = user.Job;
-                }
-                else
-                {
-                    User user = await userManager.FindByNameAsync(User.Identity.Name);
-                    var indexModel = new IndexViewModel()
-                    {
-                        Id = user.Id,
-                        Username = user.UserName,
-                        Email = user.Email,
-                        Job = user.Job.ToString(),
-                        Image = user.Image,
-
-                    };
-                    ViewData["UserImage"] = user.Image;
-                    ViewData["Username"] = user.UserName;
-                    ViewData["Job"] = user.Job;
-                }
+                return RedirectToAction("AllProducts", "Product");
             }
           
             return View();

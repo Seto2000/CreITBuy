@@ -9,7 +9,7 @@ namespace CreITBuy.Core.ViewModels.User
 
         public byte[] Image { get; set; }
         [Required(ErrorMessage ="{0} is required!")]
-        [StringLength(20, MinimumLength = 5, ErrorMessage = "{0} must be between {2} and {1} characters!")]
+        [StringLength(13, MinimumLength = 5, ErrorMessage = "{0} must be between {2} and {1} characters!")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "{0} is required!")]

@@ -1,0 +1,33 @@
+﻿@using CreITBuy.Infrastructure.Data.Models
+   <div class="jumbotron col-md-12" background-color="none">
+
+        <div class="heading-container bottom-buffer-md">
+            <h1>Welcome to CreITBuy Platform!</h1>
+            <h3>Here you can buy all you want!</h3>
+            <h3>Take a look.</h3>
+        </div>
+    <hr id="border" >
+    </div>
+    @{
+   List<Product> products = ViewData["Products"] as List<Product>;
+    foreach(var product in products)
+    {
+        <section class="shopping-cart">
+
+      <div id="shopping-cart--list-item-template"  type="text/template">
+        <a href="../Product/Details"> <div class="_grid shopping-cart--list-item"  id="grid">
+          <div class="_column product-image">
+            <img href="../Product/Details" id="product-image" class="product-image--img"  height="160" width="160"  src="@("data:image/png;base64," + Convert.ToBase64String((byte[])product.Images.FirstOrDefault().ImageData))"/>
+          </div>
+          <div class="_column product-info">
+            <h4 class="product-name" id="product-name">@product.Name</h4>
+            <p class="product-desc">@product.Description</p>
+            <div class="price product-single-price">$@product.Price </div>
+          </div>
+        </div>
+            </a>
+     </div>
+
+  </section>
+        }
+        }

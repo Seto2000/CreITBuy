@@ -16,6 +16,8 @@ using System.Security.Principal;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Windows.Input;
+
+#nullable disable
 namespace CreITBuy.Controllers
 {
     
@@ -50,11 +52,12 @@ namespace CreITBuy.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(IFormFile fileObj, RegisterViewModel Input)
+        public async Task<IActionResult> Register(IFormFile Image, RegisterViewModel Input)
         {
+           
             if (ModelState.IsValid)
             {
-                (User user, string code,IdentityResult result) = await userService.RegisterAsync(fileObj, Input);
+                (User user, string code,IdentityResult result) = await userService.RegisterAsync(Image, Input);
 
                 if (result.Succeeded)
                 {
@@ -65,10 +68,11 @@ namespace CreITBuy.Controllers
                         protocol: Request.Scheme);
 
                     await emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        $"Welcome to CreITBuy platform. Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>." +
+                        $"We hope you will have a great expiriance by joining our family." +
+                        $"Have a great day!");
 
-                        return RedirectToPage("RegisterConfirmation",
-                                              new { email = Input.Email });
+                        return Redirect("RegisterConfirmation");
                     
                 }
                 foreach (var error in result.Errors)
@@ -76,8 +80,17 @@ namespace CreITBuy.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
-            return Redirect("/User/Register");
+            var modelErrors = new List<string>();
+            foreach (var modelState in ModelState.Values)
+            {
+                foreach (var error in modelState.Errors)
+                {
+                    modelErrors.Add(error.ErrorMessage.Replace("field ",String.Empty));
+                }
+            }
+            
+                ViewData["Errors"] = new List<string>(modelErrors) ;
+            return View("../Shared/Error");
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel Input)
@@ -86,39 +99,35 @@ namespace CreITBuy.Controllers
             {
 
 
-                (User user, Microsoft.AspNetCore.Identity.SignInResult result, IndexViewModel indexModel) =
+                (User user, Microsoft.AspNetCore.Identity.SignInResult result) =
                     await userService.LoginAsync(Input);
-
-                if (user!=null)
+                if (!user.EmailConfirmed)
+                {
+                    ViewData["Errors"]=new List<string>() { "Please open your email and confirm your account!"};
+                    return View("../Shared/Error");
+                }
+                else
+                {
+                    user.LockoutEnd=DateTime.Now;
+                }
+                if (result.Succeeded)
                 {
 
                         var identity = new ClaimsIdentity("Custom");
                     HttpContext.User = new ClaimsPrincipal(identity);
 
 
-                    TempData["user"] = JsonConvert.SerializeObject(indexModel);
-                    return RedirectToAction("Index", "Home");
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new
-                    {
-                        ReturnUrl = "/",
-                    });
-                }
-                if (result.IsLockedOut)
-                {
-                    return RedirectToPage("../Lockout");
+                    return RedirectToAction("AllProducts", "Product");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Redirect("User/Login");
+                    ViewData["Errors"]=new List<string>() {"Email or password is invalid!"} ;
+                    return View("../Shared/Error");
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return Redirect("User/Login");
+            return Redirect("/User/Login");
         }
         [Authorize]
         public IActionResult Logout()
