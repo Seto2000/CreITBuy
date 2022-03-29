@@ -22,7 +22,7 @@ namespace CreITBuy.Infrastructure.Data.Models
         [StringLength(1000)]
         public string Description { get; set; }
         [Required]
-        public IList<Image> Images { get; set; } 
+        public IList<ProductImage> ProductImages { get; set; } 
         [Required]
         [Range(0,100000)]
         public decimal Price { get; set; }

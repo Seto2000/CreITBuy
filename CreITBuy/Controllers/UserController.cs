@@ -72,7 +72,7 @@ namespace CreITBuy.Controllers
                         $"We hope you will have a great expiriance by joining our family." +
                         $"Have a great day!");
 
-                        return Redirect("RegisterConfirmation");
+                        return View("../User/ConfirmRegister");
                     
                 }
                 foreach (var error in result.Errors)
@@ -101,15 +101,16 @@ namespace CreITBuy.Controllers
 
                 (User user, Microsoft.AspNetCore.Identity.SignInResult result) =
                     await userService.LoginAsync(Input);
-                if (!user.EmailConfirmed)
+                if(user == null)
                 {
-                    ViewData["Errors"]=new List<string>() { "Please open your email and confirm your account!"};
+                    ViewData["Errors"] = new List<string>() { "Email or password is invalid!" };
                     return View("../Shared/Error");
                 }
-                else
+                if (!user.EmailConfirmed)
                 {
-                    user.LockoutEnd=DateTime.Now;
+                    return View("../User/ConfirmRegister");
                 }
+                
                 if (result.Succeeded)
                 {
 
@@ -119,11 +120,7 @@ namespace CreITBuy.Controllers
 
                     return RedirectToAction("AllProducts", "Product");
                 }
-                else
-                {
-                    ViewData["Errors"]=new List<string>() {"Email or password is invalid!"} ;
-                    return View("../Shared/Error");
-                }
+                
             }
 
             // If we got this far, something failed, redisplay form

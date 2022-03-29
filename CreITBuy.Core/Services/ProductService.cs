@@ -3,6 +3,7 @@ using CreITBuy.Core.ViewModels.Product;
 using CreITBuy.Infrastructure.Data.Common;
 using CreITBuy.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,17 +21,16 @@ namespace CreITBuy.Core.Services
             validationService = _validationService;
             repo = _repo;
         }
-        public async Task<(bool,string)> Add(ProductViewModel model,IFormFile image,User user)
+        public async Task<(bool,string)> Add(ProductViewModel model,IFormFile[] images,User user)
         {
             (bool isValid,string errors)=validationService.ValidateModel(model);
+            if (images.Length > 4)
+            {
+                return (false, "You can add only 4 images!");
+            }
             if (isValid)
             {
-                using (var ms = new MemoryStream())
-                {
-                    await image.CopyToAsync(ms);
-                    var fileBytes = ms.ToArray();
-                    model.Image = fileBytes;
-                }
+                
                 Product product = new Product()
                 {
                     Name = model.Name,
@@ -38,10 +38,31 @@ namespace CreITBuy.Core.Services
                     Author= user,
                     AuthorId= user.Id,
                     PostedOn = model.PostedOn,
+                    Tags=model.Tags,
+                    Categories=model.Categories,
                     Price= model.Price,
-                    Images=new List<Image>() { new Image() {ImageData= model.Image } }
                 };
-                product.Images.First().Product = product;
+            var imageList = new List<ProductImage>();
+                foreach (var image in images)
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                
+                        await image.CopyToAsync(ms);
+                        var fileBytes = ms.ToArray();
+                        imageList.Add(new ProductImage() 
+                        {
+                            Image = new Image()
+                            {
+                                ImageData = fileBytes 
+                            },
+                            ProductId = product.Id,
+                            Product=product 
+                        });
+                    }
+
+                }
+            product.ProductImages = imageList;
                 try
                 {
                     repo.Add<Product>(product);
@@ -58,7 +79,17 @@ namespace CreITBuy.Core.Services
 
         public IList<Product> All()
         {
-           return repo.All<Product>().ToList();
+           return repo.All<Product>().Include(pi=>pi.ProductImages).ThenInclude(pi=>pi.Image).ToList();
+        }
+
+        public Image FindImageById(string imageId)
+        {
+            return repo.All<Image>().FirstOrDefault(i=>i.Id == imageId);
+        }
+
+        public Product FindProductById(string productId)
+        {
+            return repo.All<Product>().Include(p=>p.ProductImages).ThenInclude(pi=>pi.Image).Where(p=>p.Id == productId).FirstOrDefault();
         }
 
         public (bool,string) Remove(string productId)
@@ -82,5 +113,7 @@ namespace CreITBuy.Core.Services
                 return (true, null);
             }
         }
+
+        
     }
 }

@@ -21,19 +21,29 @@
                      <div class="preview">
                     <img id="file-ip-1-preview">
                 </div>
-                <label asp-for="Images" class="control-label"></label>
-                <input type="file" asp-for="Images" accept="image/*" name="fileObj" onchange="showPreview(event);"/>
-                <span asp-validation-for="Images" class="text-danger"></span>
+                <label asp-for="ProductImages" class="control-label"></label>
+                <input type="file" asp-for="ProductImages" accept="image/*" multiple name="fileObj" onchange="showPreview(event);"/>
+                <span asp-validation-for="ProductImages" class="text-danger"></span>
             </div>
             <script type="text/javascript">
    
               function showPreview(event){
-              if(event.target.files.length > 0){
+                  if(event.target.files.length > 4){
+                      alert("You are only allowed to upload a maximum of 4 files! Please, select 4 or less pictures!");
+                     
+                  }
+                  else{
+                      if(event.target.files.length > 0){
+
                 var src = URL.createObjectURL(event.target.files[0]);
                 var preview = document.getElementById("file-ip-1-preview");
                 preview.src = src;
                 preview.style.display = "block";
+                preview.style.maxHeight = "200px"
+                preview.style.maxWidth = "200px"
               }
+                  
+              
             }
             </script>
             
@@ -48,6 +58,22 @@
                 <input asp-for="Description" id="productDescription" class="form-controll" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label asp-for="Categories" class="control-label"></label>
+                <input asp-for="Categories" class="form-control" />
+                <span asp-validation-for="Categories" class="text-danger"></span>
+            </div>
+            <a>Please, separate the different categories with ", "</a>
+
+
+            <div class="form-group">
+                <label asp-for="Tags" class="control-label"></label>
+                <input asp-for="Tags" class="form-control" />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+            <a>Please, separate the different tags with ", "</a>
+
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />

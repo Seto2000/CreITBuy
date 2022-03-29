@@ -33,17 +33,17 @@ namespace CreITBuy.Controllers
                 Image = user.Image,
 
             };
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
-            ViewData["Job"] = user.Job;
+            SetUserData(user);
+
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddProduct(IFormFile fileObj,ProductViewModel Input)
+        public async Task<IActionResult> AddProduct(IFormFile[] fileObj,ProductViewModel Input)
         {
             (bool isAdded, string errors) = await productService
                 .Add(Input, fileObj, await userManager
                 .FindByNameAsync(User.Identity.Name));
+
             if (isAdded)
             {
                 return Redirect("/");
@@ -65,42 +65,35 @@ namespace CreITBuy.Controllers
 
             ViewData["Products"] = new List<Product>(productService.All());
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-            //var indexModel = new IndexViewModel()
-            //{
-            //    Id = user.Id,
-            //    Username = user.UserName,
-            //    Email = user.Email,
-            //    Job = user.Job.ToString(),
-            //    Image = user.Image,
+            SetUserData(user);
 
-            //};
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
-            ViewData["Job"] = user.Job;
             return View();
         }
-
-        public async Task<IActionResult> Details()
+        [Authorize]
+        public async Task<IActionResult> Details(string productId,string imageId)
         {
             ViewData["viewName"] = "Details";
             ViewData["controlerName"] = "Products";
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-            //var indexModel = new IndexViewModel()
-            //{
-            //    Id = user.Id,
-            //    Username = user.UserName,
-            //    Email = user.Email,
-            //    Job = user.Job.ToString(),
-            //    Image = user.Image,
-
-            //};
+            SetUserData(user);
+            Product product = productService.FindProductById(productId);
+            ViewData["Product"] = product;
+            if(imageId != null)
+            {
+                ViewData["Image"] = productService.FindImageById(imageId);
+            }
+            else
+            {
+                ViewData["Image"] = product.ProductImages.FirstOrDefault().Image;
+            }
+            return View();
+        }
+        private void SetUserData(User user)
+        {
             ViewData["UserImage"] = user.Image;
             ViewData["Username"] = user.UserName;
             ViewData["Job"] = user.Job;
-
-            return View();
         }
-
     }
 }

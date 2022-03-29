@@ -8,13 +8,9 @@ namespace CreITBuy.Infrastructure.Data.Models
         [Key]
         [StringLength(36)]
         public string Id { get; set; } = Guid.NewGuid().ToString();
+        public IList<ProductImage> ProductImages { get; set; }
         [Required]
-        [StringLength(36)]
-        public string Productid { get; set; }
-        [Required]
-        [ForeignKey(nameof(Productid))]
-        public Product Product { get; set; }
-        [Required]
+        [Column(TypeName = "image")]
         public byte[] ImageData { get; set; }
     }
 }

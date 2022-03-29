@@ -19,6 +19,7 @@ namespace CreITBuy.Infrastructures.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<UserJobRequest> UserJobRequests { get; set; }
+        DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,7 +28,18 @@ namespace CreITBuy.Infrastructures.Data
             builder.Entity<UserJobRequest>()
                 .HasKey(uj => new { uj.JobRequestId, uj.UserId });
 
+            builder.Entity<ProductImage>()
+                .HasKey(pi => new {pi.ProductId, pi.ImageId });
 
+            builder.Entity<ProductImage>()
+                .HasOne(pi=>pi.Product)
+                .WithMany(p=>p.ProductImages)
+                .HasForeignKey(pi=>pi.ProductId);
+
+            builder.Entity<ProductImage>()
+                .HasOne(pi=>pi.Image)
+                .WithMany(i=>i.ProductImages)
+                .HasForeignKey(pi=>pi.ImageId);
         }
     }
 }

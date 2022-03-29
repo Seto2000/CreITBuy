@@ -4,6 +4,7 @@ using CreITBuy.Infrastructures.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreITBuy.Infrastructures.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220328172359_ImageDataTypeChange")]
+    partial class ImageDataTypeChange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,7 +80,14 @@ namespace CreITBuy.Infrastructures.Migrations
                         .IsRequired()
                         .HasColumnType("image");
 
+                    b.Property<string>("Productid")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Productid");
 
                     b.ToTable("Images");
                 });
@@ -195,23 +204,6 @@ namespace CreITBuy.Infrastructures.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.ProductImage", b =>
-                {
-                    b.Property<string>("ProductId")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("ImageId")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.HasKey("ProductId", "ImageId");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.UserJobRequest", b =>
@@ -473,6 +465,17 @@ namespace CreITBuy.Infrastructures.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Image", b =>
+                {
+                    b.HasOne("CreITBuy.Infrastructure.Data.Models.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("Productid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Item", b =>
                 {
                     b.HasOne("CreITBuy.Infrastructure.Data.Models.Cart", null)
@@ -508,25 +511,6 @@ namespace CreITBuy.Infrastructures.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.ProductImage", b =>
-                {
-                    b.HasOne("CreITBuy.Infrastructure.Data.Models.Image", "Image")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CreITBuy.Infrastructure.Data.Models.Product", "Product")
-                        .WithMany("ProductImages")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.UserJobRequest", b =>
@@ -618,11 +602,6 @@ namespace CreITBuy.Infrastructures.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Image", b =>
-                {
-                    b.Navigation("ProductImages");
-                });
-
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.JobRequest", b =>
                 {
                     b.Navigation("UserJobRequests");
@@ -630,7 +609,7 @@ namespace CreITBuy.Infrastructures.Migrations
 
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Product", b =>
                 {
-                    b.Navigation("ProductImages");
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.User", b =>

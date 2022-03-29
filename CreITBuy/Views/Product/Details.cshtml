@@ -1,47 +1,77 @@
-﻿<head>
-      <link rel="stylesheet" href="~/css/detailsPage.css"/>
+﻿@using CreITBuy.Infrastructure.Data.Models
+<head>
 
 
 </head>
+@{
+    Product product = ((Product)ViewData["Product"]);
+}
 
-
-<div class="container bootdey">
+<div class="container bootdey" id="body">
 <div class="col-md-12">
 <section class="panel">
       <div class="panel-body">
-          <div class="col-md-6">
+          <div class="col-md-7">
               <div class="pro-img-details">
-                  <img src="https://via.placeholder.com/550x380/FFB6C1/000000" alt="">
+                  <img src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])((Image)ViewData["Image"]).ImageData))" id="main-product-picture" alt="">
               </div>
               <div class="pro-img-list">
-                  <a href="#">
-                      <img src="https://via.placeholder.com/115x100/87CEFA/000000" alt="">
-                  </a>
-                  <a href="#">
-                      <img src="https://via.placeholder.com/115x100/FF7F50/000000" alt="">
-                  </a>
-                  <a href="#">
-                      <img src="https://via.placeholder.com/115x100/20B2AA/000000" alt="">
-                  </a>
-                  <a href="#">
-                      <img src="https://via.placeholder.com/120x100/20B2AA/000000" alt="">
-                  </a>
-              </div>
+                 
+                  
+                            @foreach (var image in product.ProductImages)
+                            {
+                                 <a href="/Product/Details?productId=@(product.Id)&imageId=@image.ImageId" >
+                                     <img id="child-product-picture" src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])image.Image.ImageData))" alt="">
+                                 </a>
+                            }
+                  
+                  </div>
           </div>
           <div class="col-md-6">
               <h4 class="pro-d-title">
-                  <a href="#" class="">
-                      Leopard Shirt Dress
+                  <a id="product-details-name">
+                      @(product.Name)
                   </a>
               </h4>
               <p>
-                  Praesent ac condimentum felis. Nulla at nisl orci, at dignissim dolor, The best product descriptions address your ideal buyer directly and personally. The best product descriptions address your ideal buyer directly and personally.
+                  @(product.Description)
               </p>
               <div class="product_meta">
-                  <span class="posted_in"> <strong>Categories:</strong> <a rel="tag" href="#">Jackets</a>, <a rel="tag" href="#">Men</a>, <a rel="tag" href="#">Shirts</a>, <a rel="tag" href="#">T-shirt</a>.</span>
-                  <span class="tagged_as"><strong>Tags:</strong> <a rel="tag" href="#">mens</a>, <a rel="tag" href="#">womens</a>.</span>
+                        <span class="posted_in"> <strong>Categories:</strong>
+                            @{
+                                string[] categories = product.Categories.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+                                for(int i=0;i<categories.Length;i++)
+                                {
+                                    if (i == categories.Length-1)
+                                    {
+                                        <a >@(categories[i])</a><b>.</b>
+                                    }
+                                    else
+                                    {
+                                        <a >@(categories[i])</a><b>,</b>
+
+                                    }
+                                }
+                            }
+                        <span class="tagged_as"><strong>Tags:</strong> 
+                            @{
+                                string[] tags = product.Tags.Split(", ", StringSplitOptions.RemoveEmptyEntries);
+                                for(int i=0;i<tags.Length;i++)
+                                {
+                                    if (i == tags.Length-1)
+                                    {
+                                        <a >@tags[i]</a> <b>.</b>
+                                    }
+                                    else
+                                    {
+                                        <a >@tags[i] </a> <b>,</b>
+
+                                    }
+                                } 
+                            }
+                            </span>
               </div>
-              <div class="m-bot15"> <strong>Price : </strong> <span class="amount-old">$544</span>  <span class="pro-price"> $300.00</span></div>
+              <div class="m-bot15"> <strong>Price : </strong>   <span class="pro-price"> $@product.Price.ToString("0.00")</span></div>
              
               <p>
                   <button class="btn btn-round btn-danger" type="button"><i class="fa fa-shopping-cart"></i> Add to Cart</button>

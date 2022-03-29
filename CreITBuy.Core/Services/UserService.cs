@@ -57,48 +57,66 @@ namespace CreITBuy.Core.Services
         public async Task<(User, SignInResult)> LoginAsync(LoginViewModel Input)
         {
             var user = await userManager.FindByEmailAsync(Input.Email);
-            var result = await signInManager.PasswordSignInAsync(user,
-                                   Input.Password, false, false);
-
-            if (user != null)
+            if(user != null)
             {
-                await signInManager.SignInAsync(user, isPersistent: false);
 
+            
+                if (!user.EmailConfirmed)
+                {
+                    return (user, SignInResult.Failed);
+                }
+                var result = await signInManager.PasswordSignInAsync(user,
+                                       Input.Password, false, false);
+
+                
                 return (user, result);
             }
-            return (null, result);
+            return (null,null);
         }
         public async Task<(User,string,IdentityResult)> RegisterAsync(IFormFile fileObj, RegisterViewModel Input)
         {
-
-            if (fileObj!=null)
+            (bool isValid,string error)=validationService.ValidateModel(Input);
+            if (isValid)
             {
-                using (var ms = new MemoryStream())
+                if (fileObj != null)
                 {
-                    await fileObj.CopyToAsync(ms);
-                    var fileBytes = ms.ToArray();
-                    Input.Image = fileBytes;
+                    using (var ms = new MemoryStream())
+                    {
+                        await fileObj.CopyToAsync(ms);
+                        var fileBytes = ms.ToArray();
+                        Input.Image = fileBytes;
+                    }
+                }
+                else
+                {
+                    error += ";Image is required!";
+                }
+                var user = new User
+                {
+                    UserName = Input.Username,
+                    Email = Input.Email,
+                    Image = Input.Image,
+                    Cart = new Cart(),
+                    Job = (Jobs)Enum.Parse(typeof(Jobs), Input.Job),
+                    LockoutEnabled = false
+                };
+                var result = await userManager.CreateAsync(user, Input.Password);
+                
+                if (result.Succeeded)
+                {
+
+                    var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
+                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    return (user, code, result);
                 }
             }
-            var user = new User 
-            { 
-                UserName = Input.Username,
-                Email = Input.Email,
-                Image = Input.Image,
-                Cart = new Cart(),
-                Job = (Jobs)Enum.Parse(typeof(Jobs), Input.Job),
-                LockoutEnabled = false
-            };
-            var result = await userManager.CreateAsync(user, Input.Password);
-            if (result.Succeeded)
+            var identityErorrs = new List<IdentityError>();
+            foreach (var item in error.Split(";", StringSplitOptions.RemoveEmptyEntries).ToArray())
             {
-
-                var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                return (user,code,result);
+                identityErorrs.Add(new IdentityError() { Description=item.Trim() });
             }
-            
-                return(null,null,result);
+           var result2 = IdentityResult.Failed(identityErorrs.ToArray());
+                return (null,null,result2) ;
             
 
         }

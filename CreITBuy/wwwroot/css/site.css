@@ -254,7 +254,15 @@ div.product-single-price {
     width: 16.663198%;
     background: url("data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7") no-repeat center / cover transparent;
 }
-
+#confirmAccount {
+    margin-left:41px;
+}
+#confirmText {
+    margin:8px;
+}
+#product-details-name {
+    font-size:30px;
+}
 /**
  * @section: product-info;
  * @extends: _column;

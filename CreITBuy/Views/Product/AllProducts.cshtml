@@ -1,4 +1,6 @@
-﻿@using CreITBuy.Infrastructure.Data.Models
+﻿@using CreITBuy.Infrastructure.Data.Models;
+@using System.Linq;
+@using Microsoft.EntityFrameworkCore;
    <div class="jumbotron col-md-12" background-color="none">
 
         <div class="heading-container bottom-buffer-md">
@@ -15,9 +17,9 @@
         <section class="shopping-cart">
 
       <div id="shopping-cart--list-item-template"  type="text/template">
-        <a href="../Product/Details"> <div class="_grid shopping-cart--list-item"  id="grid">
+        <a href="../Product/Details?productId=@product.Id"> <div class="_grid shopping-cart--list-item"  id="grid">
           <div class="_column product-image">
-            <img href="../Product/Details" id="product-image" class="product-image--img"  height="160" width="160"  src="@("data:image/png;base64," + Convert.ToBase64String((byte[])product.Images.FirstOrDefault().ImageData))"/>
+            <img  id="product-image" class="product-image--img"  height="160" width="160"  src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])product.ProductImages.FirstOrDefault().Image.ImageData))"/>
           </div>
           <div class="_column product-info">
             <h4 class="product-name" id="product-name">@product.Name</h4>

@@ -11,8 +11,10 @@ namespace CreITBuy.Core.Contracts
 {
     public interface IProductService
     {
-        Task<(bool, string)> Add(ProductViewModel model, IFormFile image, User user);
+        Task<(bool, string)> Add(ProductViewModel model, IFormFile[] image, User user);
         public (bool, string) Remove(string productId);
         IList<Product> All();
+        Product FindProductById(string productId);
+        Image FindImageById(string imageId);
     }
 }
