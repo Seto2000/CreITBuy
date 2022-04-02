@@ -18,8 +18,6 @@ namespace CreITBuy.Infrastructure.Data.Models
         public string ProductId { get; set; }
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; }
-        [Required]
 
-        public int Quantity { get; set; } = 1;
     }
 }

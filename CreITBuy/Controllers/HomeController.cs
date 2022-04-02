@@ -24,7 +24,6 @@ namespace CreITBuy.Controllers
         }
         public IActionResult Index()
         {
-            ViewData["Products"] = new List<Product>(productService.All());
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             ViewData["viewName"] = "Index";
             ViewData["controlerName"] = "Home";

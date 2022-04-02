@@ -13,6 +13,12 @@ html {
   min-height: 100%;
 }
 
+.author-product {
+    text-align: right;
+    margin-top: -8rem;
+    margin-right: -6rem;
+    font-size: 30px;
+}
 body {
     margin-bottom: 60px;
 }

@@ -11,6 +11,8 @@ namespace CreITBuy.Infrastructure.Data.Models
         [StringLength(36)]
         public string Id { get; set; } = Guid.NewGuid().ToString();
         [Required]
+        public string CardType { get; set; }
+        [Required]
         [StringLength(100)]
         public string CardholderName { get; set; }
         [Required]

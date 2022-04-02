@@ -15,16 +15,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css"/>
   <!-- Theme style -->
   <link rel="stylesheet" href="~/css/adminlte.min.css"/>
+        <link rel="stylesheet" href="~/css/allProductsStylet.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"/>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
 
 
   <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+  <link rel="stylesheet" href="~/css/CartStyle.css" asp-append-version="true"/>
   <link rel="stylesheet" href="~/css/detailsPage.css" asp-append-version="true"/>
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini" style="margin-top: 15px;">
 <div class="wrapper">
 
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light" id="main-header" style="margin-top: -15px;">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -64,6 +70,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     <li class="nav-item d-none d-sm-inline-block">
                      <a href="../Product/AddProduct" class="nav-link"><font size="4">Add Product</font></a>
+                    </li>
+                    
+                    <li class="nav-item d-none d-sm-inline-block">
+                     <a href="../Cart/MyCart" class="nav-link"><font size="4">My Cart</font></a>
                     </li>
                 }
             </ul>
@@ -136,22 +146,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-
-          <li class="nav-item">
-            <a b-undt220x7a="" href="../User/Login" class="nav-link" style="
+                        @if (!Convert.ToBoolean(ViewData["isAuthenticated"]) || ViewData["isAuthenticated"] == null)
+                        {
+                            <li class="nav-item">
+                                <a b-undt220x7a="" href="../User/Login" class="nav-link" style="
                 background-color: #d02328;
                 color: white;">
-            <div id="nav-items-text">
-              <i b-undt220x7a="" class="fas fa-user"></i>
-              <p b-undt220x7a="">
-                &nbsp;&nbsp;&nbsp; Log In
-              </p>
-              </div>
-            </a>
-          </li>
+                                    <div id="nav-items-text">
+                                        <i b-undt220x7a="" class="fas fa-user"></i>
+                                        <p b-undt220x7a="">
+                                            &nbsp;&nbsp;&nbsp; Log In
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
 
-          <li class="nav-item">
-            <a b-undt220x7a="" href="../User/Register" class="nav-link" style="
+                            <li class="nav-item">
+                                <a b-undt220x7a="" href="../User/Register" class="nav-link" style="
                 background-color: #d02328;
                 color: white;">
             <div id="nav-items-text">
@@ -161,10 +172,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </p>
               </div>
             </a>
-          </li>
-
-
-        </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a b-undt220x7a="" href="../Prduct/AddProduct" class="nav-link" style="
+                                    background-color: #d02328;
+                                    color: white;">
+                                    <div id="nav-items-text">
+                                        <i b-undt220x7a="" class="fas fa-plus"></i>
+                                        <p b-undt220x7a="">
+                                            &nbsp;&nbsp;&nbsp; Add Product
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+                        }
+                    </ul>
       </nav>
       <!-- /.sidebar-menu -->
     </div>
@@ -172,7 +197,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper" >
+  <div class="content-wrapper" style="min-height: 1145px;" >
       
     <!-- Content Header (Page header) -->
     <div class="content-header">

@@ -27,6 +27,7 @@ builder.Services.AddDistributedMemoryCache()
 });
 // Add framework services.
 builder.Services.AddScoped<IUserService,UserService>()
+    .AddScoped<ICartService,CartService>()
     .AddScoped<IValidationService,ValidationService>()
     .AddScoped<IRepo, Repo>()
     .AddScoped<IProductService,ProductService>();
@@ -54,10 +55,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     // Cookie settings
     options.Cookie.HttpOnly = false;
-    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
 
     
-    options.LoginPath = "/../Views/User/Login";
+    options.LoginPath = "/../User/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     options.SlidingExpiration = true;
 });

@@ -10,26 +10,51 @@
         </div>
     <hr id="border" >
     </div>
-    @{
-   List<Product> products = ViewData["Products"] as List<Product>;
-    foreach(var product in products)
-    {
-        <section class="shopping-cart">
 
-      <div id="shopping-cart--list-item-template"  type="text/template">
-        <a href="../Product/Details?productId=@product.Id"> <div class="_grid shopping-cart--list-item"  id="grid">
-          <div class="_column product-image">
-            <img  id="product-image" class="product-image--img"  height="160" width="160"  src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])product.ProductImages.FirstOrDefault().Image.ImageData))"/>
-          </div>
-          <div class="_column product-info">
-            <h4 class="product-name" id="product-name">@product.Name</h4>
-            <p class="product-desc">@product.Description</p>
-            <div class="price product-single-price">$@product.Price </div>
-          </div>
-        </div>
-            </a>
-     </div>
 
-  </section>
-        }
-        }
+    <ul class="gallerywide clr normal" id="gallerywide">
+		@foreach (var product in (List<Product>)ViewData["Products"])
+		{
+			<li rel="" class="wrap tleft rel fleft ad_id2bpPB " data-adnumber="1" data-id="32273579">
+	<div class="mheight tcenter" style="
+    margin-left: -19px;
+">
+		<a title="@product.Name" href="/../Product/Details?productId=@product.Id" style="
+    width: 374px;
+" class="thumb tdnone scale1 rel detailsLinkPromoted linkWithHash ">
+							<img style="
+       max-width: 344px;
+    max-height: 180px;
+" src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])product.ProductImages.FirstOrDefault().Image.ImageData))">
+		</a>
+	</div>
+	<div class="inner">
+		        <span class="courier-stamp">
+        <i data-icon="delivery"></i>
+    </span>
+    
+        <h4 class="normal">
+		    <a href="/../Product/Details?productId=@product.Id" title="@product.Name" class="link linkWithHash detailsLinkPromoted">
+				<strong>@product.Name</strong>
+			</a>
+		</h4>
+		<p class="lheight14 color-1 margintop2 brkword">
+			<span class="breadcrumb small">
+            						@(string.Join(", ",product.Categories)).</span>
+		</p>
+	</div>
+	<ul class="date-location">
+		
+		<li style="
+    margin-left: -41px;
+    margin-top: -61px;
+">Posted on: @product.PostedOn.ToString("dd.MM.yyyy")</li>
+	</ul>
+	<div class="price ">
+					@product.Price.ToString("0.00") лв.		                		        
+					</div>
+   	   	</li>
+		}
+     
+    </ul>
+   

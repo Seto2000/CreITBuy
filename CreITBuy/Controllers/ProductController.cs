@@ -24,17 +24,10 @@ namespace CreITBuy.Controllers
             ViewData["viewName"] = "Add";
             ViewData["controlerName"] = "Product";
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-            var indexModel = new IndexViewModel()
-            {
-                Id = user.Id,
-                Username = user.UserName,
-                Email = user.Email,
-                Job = user.Job.ToString(),
-                Image = user.Image,
-
-            };
-            SetUserData(user);
-
+           
+            ViewData["UserImage"] = user.Image;
+            ViewData["Username"] = user.UserName;
+            ViewData["Job"] = user.Job;
             return View();
         }
         [HttpPost]
@@ -65,8 +58,9 @@ namespace CreITBuy.Controllers
 
             ViewData["Products"] = new List<Product>(productService.All());
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-            SetUserData(user);
-
+            ViewData["UserImage"] = user.Image;
+            ViewData["Username"] = user.UserName;
+            ViewData["Job"] = user.Job;
             return View();
         }
         [Authorize]
@@ -76,8 +70,9 @@ namespace CreITBuy.Controllers
             ViewData["controlerName"] = "Products";
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-            SetUserData(user);
-            Product product = productService.FindProductById(productId);
+            ViewData["UserImage"] = user.Image;
+            ViewData["Username"] = user.UserName;
+            ViewData["Job"] = user.Job; Product product = productService.FindProductById(productId);
             ViewData["Product"] = product;
             if(imageId != null)
             {
@@ -88,12 +83,6 @@ namespace CreITBuy.Controllers
                 ViewData["Image"] = product.ProductImages.FirstOrDefault().Image;
             }
             return View();
-        }
-        private void SetUserData(User user)
-        {
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
-            ViewData["Job"] = user.Job;
         }
     }
 }
