@@ -23,10 +23,7 @@ namespace CreITBuy.Controllers
             ViewData["viewName"] = "Add";
             ViewData["controlerName"] = "Product";
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-           
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
-            ViewData["Job"] = user.Job;
+            ViewData["User"] = user;
             return View();
         }
         [HttpPost]
@@ -34,6 +31,12 @@ namespace CreITBuy.Controllers
         [RequestSizeLimit(2147483648)]
         public async Task<IActionResult> AddProduct(IFormFile[] fileObj,IFormFile productArchive,ProductViewModel Input)
         {
+            if(fileObj == null || productArchive == null || Input == null)
+            {
+                ViewData["Errors"] = new List<string>() { "You are trying to upload too large files or somthing went wrong!" };
+                  
+                return View("Error");
+            }
             (bool isAdded, string errors) = await productService
                 .Add(Input, fileObj, productArchive, await userManager
                 .FindByNameAsync(User.Identity.Name));
@@ -51,17 +54,38 @@ namespace CreITBuy.Controllers
             }
         }
         [Authorize]
-        public async Task<IActionResult> AllProducts()
+        public async Task<IActionResult> AllProducts(string tags)
         {
-            ViewData["viewName"] = "All";
-            ViewData["controlerName"] = "Products";
-            ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
+            if (string.IsNullOrEmpty(tags))
+            {
+                ViewData["viewName"] = "All";
+                ViewData["controlerName"] = "Products";
+                ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
+                ViewData["isSearching"] = false;
+                ViewData["Products"] = new List<Product>(productService.All());
+                User user = await userManager.FindByNameAsync(User.Identity.Name);
+                ViewData["User"] = user;
+            }
+            else
+            {
+                List<Product> products = new List<Product>();
+                List<string> tagsArr = new List<string>(tags.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+                products = productService
+                    .All()
+                    .Where(p => p.Tags
+                    .Split(", ")
+                    .Any(tag => tagsArr.Contains(tag)))
+                    .ToList();
 
-            ViewData["Products"] = new List<Product>(productService.All());
-            User user = await userManager.FindByNameAsync(User.Identity.Name);
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
-            ViewData["Job"] = user.Job;
+                ViewData["viewName"] = "Search";
+                ViewData["controlerName"] = "Products";
+                ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
+                ViewData["isSearching"] = true;
+                ViewData["Products"] = products;
+                User user = await userManager.FindByNameAsync(User.Identity.Name);
+                ViewData["User"] = user;
+            }
+            
             return View();
         }
         [Authorize]
@@ -71,9 +95,8 @@ namespace CreITBuy.Controllers
             ViewData["controlerName"] = "Products";
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
-            ViewData["Job"] = user.Job; Product product = productService.FindProductById(productId);
+            ViewData["User"] = user;
+            Product product = productService.FindProductById(productId);
             ViewData["Product"] = product;
             if(imageId != null)
             {
@@ -85,5 +108,6 @@ namespace CreITBuy.Controllers
             }
             return View();
         }
+       
     }
 }

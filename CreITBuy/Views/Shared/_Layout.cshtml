@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using CreITBuy.Infrastructure.Data.Models
+<!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
@@ -81,7 +82,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
-                @if (true||(bool)ViewData["IsAuthenticated"])
+                @if ((bool)ViewData["IsAuthenticated"])
                 {
                          <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
@@ -90,9 +91,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="navbar-search-block" id="search">
           <form class="form-inline">
             <div class="input-group input-group-sm">
-              <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+              <input style="width:460px;" name="tags" class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
               <div class="input-group-append">
-                <button class="btn btn-navbar" type="submit">
+                <button href="/../Product/Search" class="btn btn-navbar" type="submit" >
                   <i class="fas fa-search"></i>
                 </button>
                 <button class="btn btn-navbar" type="button" data-widget="navbar-search">
@@ -122,18 +123,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Main Sidebar Container -->
   <aside id="sidebar" height="-1cm" class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    
+    @{User user = (User)ViewData["User"];}
             <!-- Sidebar -->
     <div class="sidebar">
-    @if (Convert.ToBoolean(ViewData["isAuthenticated"]))
+    @if ((bool)(ViewData["isAuthenticated"]))
             {
                     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                         <div class="image">
-            <img  id="ItemPreview" class="img-circle elevation-2"  src="@("data:image/png;base64," + Convert.ToBase64String((byte[])ViewData["UserImage"]))">
+            <img  id="ItemPreview" class="img-circle elevation-2"  src="@("data:image/png;base64," + Convert.ToBase64String((byte[])user.Image))">
         </div>
         <div class="info">
-          <a href="#" class="d-block"><font size="5">@ViewData["Username"]</font></a>
-          <a class="d-block">@ViewData["Job"]</a>
+          <a href="/../User/Details?authorId=@user.Id" class="d-block"><font size="5">@user.UserName</font></a>
+          <a class="d-block">@user.Job</a>
         </div>
       </div>
             }

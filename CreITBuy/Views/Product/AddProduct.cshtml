@@ -21,41 +21,54 @@
                      <div class="preview">
                     <img id="file-ip-1-preview">
                 </div>
-                <label asp-for="ProductImages" class="control-label"></label>
-                <input type="file" asp-for="ProductImages" accept="image/*" multiple min="1" max="5" name="fileObj" onchange="showPreview(event);"/>
-                <span asp-validation-for="ProductImages" class="text-danger"></span>
+                <label asp-for="ProductImages" class="control-label">Product Images</label>
+                <input id="productImages" type="file" asp-for="ProductImages" accept="image/*" multiple  name="fileObj" />
+                <span id="productImagesSpan" asp-validation-for="ProductImages" class="text-danger"></span>
             </div>
             
+             <script >
+   
+             let input = document.getElementById('productImages');
+                let span = document.getElementById('productImagesSpan');
+                input.addEventListener('change', () => {
+                let files = input.files;
+   
+                if(files.length > 0) {
+                if(files.length > 5){
+                 span.innerText = 'Please, select 1 to 5 images!';
+                 return;
+                }
+                }
+                span.innerText = 'Please, select images of your product!';
+                });
+            
+            </script>
+
             <div class="form-group">
                      <div class="preview">
                     <img id="file-ip-1-preview">
                 </div>
-                <label asp-for="ProductArchive" class="control-label"></label>
-                <input type="file" asp-for="ProductArchive"  accept=".zip,.rar" max-file-size="2147483648" name="productArchive"  />
-                <span asp-validation-for="ProductArchive" class="text-danger"></span>
+                <label asp-for="ProductArchive" class="control-label">Product Archive</label>
+                <input id="productArchive" type="file" asp-for="ProductArchive"  accept=".zip,.rar" max-file-size="2147483648" name="productArchive"  />
+                <span id="productArchiveSpan" asp-validation-for="ProductArchive" class="text-danger"></span>
             </div>
-          
-            <script type="text/javascript">
+            <script>
+                let input = document.getElementById('productArchive');
+                let span = document.getElementById('productArchiveSpan');
+                input.addEventListener('change', () => {
+                let files = input.files;
    
-              function showPreview(event){
-                  if(event.target.files.length > 5){
-                      alert("You are only allowed to upload a maximum of 5 files! Please, select 5 or less pictures!");
-                     
-                  }
-                  else{
-                  if(event.target.files.length > 0){
-
-                var src = URL.createObjectURL(event.target.files[0]);
-                var preview = document.getElementById("file-ip-1-preview");
-                preview.src = src;
-                preview.style.display = "block";
-                preview.style.maxHeight = "200px"
-                preview.style.maxWidth = "200px"
-              }
-                  
-              }
-            
-            </script>
+                if(files.length > 0) {
+                if(files[0].size > 2147483648){
+                 span.innerText = 'File Size Exceeds 2gb';
+                 return;
+                }
+                }
+                span.innerText = 'Please, select archive of your product!';
+                });
+</script>
+          
+           
             
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>

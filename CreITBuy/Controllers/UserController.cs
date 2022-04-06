@@ -61,8 +61,7 @@ namespace CreITBuy.Controllers
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             User user = await userManager.FindByNameAsync(User.Identity.Name);
             ViewData["User"]=await userManager.FindByIdAsync(authorId);
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
+            
             ViewData["Products"] = productService.All().OrderByDescending(p=>p.PostedOn).Take(4).ToList();
             return View();
         }

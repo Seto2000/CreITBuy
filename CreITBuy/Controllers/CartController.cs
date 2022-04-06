@@ -23,9 +23,7 @@ namespace CreITBuy.Controllers
             ViewData["controlerName"] = "Cart";
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             User user = await userManager.FindByNameAsync(User.Identity.Name);
-            ViewData["UserImage"] = user.Image;
-            ViewData["Username"] = user.UserName;
-            ViewData["Job"] = user.Job;
+            ViewData["User"] = user;
             Cart cart = cartService.GetCartByUsername(User.Identity.Name);
             ViewData["Cart"]=cart;
             return View();
