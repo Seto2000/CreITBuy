@@ -1,0 +1,86 @@
+﻿@using CreITBuy.Infrastructure.Data.Models
+<div class="row py-5 px-4">
+    <div class="col-md-5 mx-auto">
+        <!-- Profile widget -->
+        @{
+            User user = (User)ViewData["User"];
+       }
+        <div class="bg-white shadow rounded overflow-hidden" id="profile-block">
+            <div class="px-4 pt-0 pb-4 cover">
+                <div class="media align-items-end profile-head">
+                    <div class="profile mr-3"><img src="@("data:image/png;base64," + Convert.ToBase64String(user.Image))" alt="..." width="130" class="rounded mb-2 img-thumbnail"><a href="#" class="btn btn-outline-dark btn-sm btn-block">Edit profile</a></div>
+                    <div class="media-body mb-5 text-white">
+                        <h4 class="mt-0 mb-0">@user.UserName</h4>
+                        <p class="small mb-4"> <i class="fas fa-map-marker-alt mr-2"></i>@user.LiveIn</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-light p-4 d-flex justify-content-end text-center">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">@user.Products.Count</h5><small class="text-muted"> <i class="fas fa-boxes"></i> &nbsp;Products</small>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">745</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Followers</small>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">340</h5><small class="text-muted"> <i class="fas fa-user mr-1"></i>Following</small>
+                    </li>
+                </ul>
+            </div>
+            <div class="px-4 py-3">
+                <h5 class="mb-0">About</h5>
+                <div class="p-4 rounded shadow-sm bg-light">
+                    <p class="font-italic mb-0">@user.Job</p>
+                    <p class="font-italic mb-0">Lives in @user.LiveIn</p>
+                </div>
+            </div>
+            <div class="py-4 px-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="mb-0">Recent photos</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                </div>
+                <div class="row" style="margin-left:145px">
+                    
+                   @foreach (var product in ((List<Product>)ViewData["Products"]).Where(p=>p.AuthorId==user.Id))
+		{
+			<li rel="" class="wrap tleft rel fleft ad_id2bpPB " data-adnumber="1" data-id="32273579" style="   margin: 30px;
+border-style: outset;
+    padding: 12px;">
+	<div class="mheight tcenter" style="
+">
+		<a title="@product.Name" href="/../Product/Details?productId=@product.Id" style="
+" class="thumb tdnone scale1 rel detailsLinkPromoted linkWithHash ">
+							<img style="
+" src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])product.ProductImages.FirstOrDefault().Image.ImageData))">
+		</a>
+	</div>
+	<div class="inner">
+		        <span class="courier-stamp">
+        <i data-icon="delivery"></i>
+    </span>
+    
+        <h4 class="normal">
+		    <a href="/../Product/Details?productId=@product.Id" title="@product.Name" class="link linkWithHash detailsLinkPromoted">
+				<strong>@product.Name</strong>
+			</a>
+		</h4>
+		<p class="lheight14 color-1 margintop2 brkword">
+			<span class="breadcrumb small">
+            						@(string.Join(", ",product.Categories)).</span>
+		</p>
+	</div>
+	<ul class="date-location">
+		
+		<li style="margin-left: -38px;
+">Posted on: @product.PostedOn.ToString("dd.MM.yyyy")</li>
+	</ul>
+	<div class="price ">
+					@product.Price.ToString("0.00") лв.		                		        
+					</div>
+   	   	</li>
+		}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

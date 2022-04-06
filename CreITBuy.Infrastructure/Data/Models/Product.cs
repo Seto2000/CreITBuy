@@ -22,6 +22,8 @@ namespace CreITBuy.Infrastructure.Data.Models
         [StringLength(1000)]
         public string Description { get; set; }
         [Required]
+        public byte[] ProductArchive { get; set; }
+        [Required]
         public IList<ProductImage> ProductImages { get; set; } 
         [Required]
         [Range(0,100000)]

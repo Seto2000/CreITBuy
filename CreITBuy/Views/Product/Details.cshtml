@@ -33,8 +33,9 @@
                   <a id="product-details-name">
                       @(product.Name)
                       </a>
+                      <div style="    margin-top: -44px;">
                       <a id="author-picture-by">Created by:</a><img class="brand-image img-circle" id="author-picture" src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])product.Author.Image))" alt=""><a href="/User/Details?authorId=@product.AuthorId" id="author-name">@product.Author.UserName</a>
-                  
+                  </div>
                   
                   
               </h4>

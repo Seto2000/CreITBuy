@@ -33,6 +33,10 @@ namespace CreITBuy.Infrastructures.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("CardType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CardholderName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -183,6 +187,10 @@ namespace CreITBuy.Infrastructures.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("ProductArchive")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
@@ -451,6 +459,11 @@ namespace CreITBuy.Infrastructures.Migrations
                     b.Property<int>("Job")
                         .HasMaxLength(15)
                         .HasColumnType("int");
+
+                    b.Property<string>("LiveIn")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasIndex("CartId")
                         .IsUnique()

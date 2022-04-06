@@ -24,14 +24,20 @@ namespace CreITBuy.Controllers
     public class UserController: Controller
     {
         private readonly IEmailSender emailSender;
-        
+        private readonly UserManager<User> userManager;
+
         private readonly IUserService userService;
+        private readonly IProductService productService;
 
         public UserController(
+            UserManager<User> _userManager,
+            IProductService _productService,
             IEmailSender _emailSender,
             IUserService _userService
             )
         {
+            userManager = _userManager;
+            productService = _productService;
             emailSender = _emailSender;
             userService = _userService;
         }
@@ -48,6 +54,16 @@ namespace CreITBuy.Controllers
             ViewData["viewName"] = "Register";
             ViewData["controlerName"] = "User";
             ViewData["isAuthenticated"] = false;
+            return View();
+        }
+        public async Task<IActionResult> Details(string authorId)
+        {
+            ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
+            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            ViewData["User"]=await userManager.FindByIdAsync(authorId);
+            ViewData["UserImage"] = user.Image;
+            ViewData["Username"] = user.UserName;
+            ViewData["Products"] = productService.All().OrderByDescending(p=>p.PostedOn).Take(4).ToList();
             return View();
         }
         [HttpPost]

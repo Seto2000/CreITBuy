@@ -57,11 +57,12 @@ a:not([href]):not([class]) {
     border-style: solid;
     border-color: #6c757d;
     border-radius: 8px;
+    object-fit: contain;
 }
 
 #child-product-picture {
-    height: 150px;
-    width: 150px;
+    height: 152px;
+    width: 152px;
     border-style: solid;
     border-color: #6c757d;
     border-radius: 8px;
@@ -181,8 +182,11 @@ a:not([href]):not([class]) {
 
 .pro-img-list {
     margin-top: 10px;
-    margin-left: -8px;
-    display: inline-block;
+    width: 800px;
+    margin-left: -80px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
 }
 
     .pro-img-list a {

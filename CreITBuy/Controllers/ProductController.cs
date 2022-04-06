@@ -5,7 +5,6 @@ using CreITBuy.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-#nullable disable
 namespace CreITBuy.Controllers
 {
     public class ProductController : Controller
@@ -31,10 +30,12 @@ namespace CreITBuy.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddProduct(IFormFile[] fileObj,ProductViewModel Input)
+        [RequestFormLimits(MultipartBodyLengthLimit = 2147483648)]
+        [RequestSizeLimit(2147483648)]
+        public async Task<IActionResult> AddProduct(IFormFile[] fileObj,IFormFile productArchive,ProductViewModel Input)
         {
             (bool isAdded, string errors) = await productService
-                .Add(Input, fileObj, await userManager
+                .Add(Input, fileObj, productArchive, await userManager
                 .FindByNameAsync(User.Identity.Name));
 
             if (isAdded)

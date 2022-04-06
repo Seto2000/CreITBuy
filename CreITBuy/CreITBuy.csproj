@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-CreITBuy-A1EF4C55-138C-4218-BFBE-C93F1D2C4D88</UserSecretsId>
   </PropertyGroup>

@@ -21,12 +21,16 @@ namespace CreITBuy.Core.Services
             validationService = _validationService;
             repo = _repo;
         }
-        public async Task<(bool,string)> Add(ProductViewModel model,IFormFile[] images,User user)
+        public async Task<(bool,string)> Add(ProductViewModel model,IFormFile[] images,IFormFile productArchive,User user)
         {
             (bool isValid,string errors)=validationService.ValidateModel(model);
-            if (images.Length > 4)
+            if (images.Length > 5 || images.Length==0)
             {
-                return (false, "You can add only 4 images!");
+                return (false, "You have to add at least 1 and only 5 images!");
+            }
+            if (productArchive.Length == 0)
+            {
+                return (false, "Please, upload your product archive in format zip or rar!");
             }
             if (isValid)
             {
@@ -40,25 +44,31 @@ namespace CreITBuy.Core.Services
                     PostedOn = model.PostedOn,
                     Tags=model.Tags,
                     Categories=model.Categories,
-                    Price= model.Price,
+                    Price= model.Price
                 };
             var imageList = new List<ProductImage>();
+                using (var ms = new MemoryStream())
+                {
+                    await productArchive.CopyToAsync(ms);
+                    var archiveBytes = ms.ToArray();
+                    product.ProductArchive = archiveBytes;
+                }
                 foreach (var image in images)
                 {
+                    
                     using (var ms = new MemoryStream())
                     {
-                
                         await image.CopyToAsync(ms);
-                        var fileBytes = ms.ToArray();
-                        imageList.Add(new ProductImage() 
+                    var fileBytes = ms.ToArray();
+                    imageList.Add(new ProductImage() 
+                    {
+                        Image = new Image()
                         {
-                            Image = new Image()
-                            {
-                                ImageData = fileBytes 
-                            },
-                            ProductId = product.Id,
-                            Product=product 
-                        });
+                            ImageData = fileBytes 
+                        },
+                        ProductId = product.Id,
+                        Product=product 
+                    });
                     }
 
                 }

@@ -12,7 +12,15 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+#confirm-email-message {
+    color: #212529;
+}
+#confirmText {
+    color: #155724;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+}
 .author-product {
     text-align: right;
     margin-top: -8rem;
@@ -425,4 +433,20 @@ button.btn-close {
 }
 #nav-items-text {
     margin-left:20px;
+}
+
+
+
+.profile-head {
+    transform: translateY(5rem)
+}
+
+.cover {
+    background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
+    background-size: cover;
+    background-repeat: no-repeat
+}
+#profile-block {
+    margin-left: -131px;
+    width: 1223px;
 }

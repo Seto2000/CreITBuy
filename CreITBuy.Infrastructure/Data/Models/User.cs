@@ -17,6 +17,9 @@ namespace CreITBuy.Infrastructure.Data.Models
         [Column(TypeName ="image")]
         public byte[] Image { get; set; }
         [Required]
+        [StringLength(100)]
+        public string  LiveIn { get; set; }
+        [Required]
         [StringLength(36)]
         public string CartId { get; set; }
         [Required]
