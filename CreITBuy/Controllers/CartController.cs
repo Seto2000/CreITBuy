@@ -4,6 +4,7 @@ using CreITBuy.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IO.Compression;
 #nullable disable
 namespace CreITBuy.Controllers
 {
@@ -48,13 +49,32 @@ namespace CreITBuy.Controllers
             ViewData["Errors"]= new List<string>() { "Cannot add product to Cart!" };
             return View("Error");
         }
-        public IActionResult Checkout(string cartId,PaymentViewModel model)
+        public async Task<IActionResult> Checkout(string cartId,PaymentViewModel model)
         {
+
+            (bool isCheckedout, List<(byte[] file, string name)> files) = cartService.Checkout(cartId);
             
-            bool isCheckedout = cartService.Checkout(cartId);
             if (isCheckedout)
             {
-                return Redirect("/");
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    using (var archive = new ZipArchive(ms, ZipArchiveMode.Create, true))
+                    {
+                            var i = 1;
+                        foreach (var file in files)
+                        {
+                            var entry = archive.CreateEntry(file.name + ".zip", CompressionLevel.Fastest);
+                            using (var zipStream = entry.Open())
+                            {
+                               await zipStream.WriteAsync(file.file, 0, file.file.Length);
+                            }
+                            i++;
+                        }
+                    }
+
+                    return  File(ms.ToArray(), "application/zip", "Products.zip");
+                }
+                
             }
             ViewData["Errors"] = new List<string>() { "Cannot Checkout! Somethig went wrong!" };
             return View("Error");

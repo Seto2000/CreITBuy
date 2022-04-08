@@ -49,7 +49,16 @@
                                     <br>
                                     <div><label class="checkbox">Do you want to save your card? <input type="checkbox" name="IsSaving" value="true"></label>  <div>
                                     <hr class="line">
-                                    <div class="d-flex justify-content-between information"><span>Total</span><span>$@cart.Items.Sum(i=>i.Product.Price).ToString("0.00")</span></div><a href="/../Cart/Checkout?cartId=@cart.Id"><button  class="btn btn-primary btn-block d-flex justify-content-between mt-3" type="button"><span>$@cart.Items.Sum(i=>i.Product.Price).ToString("0.00")</span><span>Checkout<i class="fa fa-long-arrow-right ml-1"></i></span></button></a>
+                                    <div class="d-flex justify-content-between information"><span>Total</span><span>$@cart.Items.Sum(i=>i.Product.Price).ToString("0.00")</span></div><a  href="/../Cart/Checkout?cartId=@cart.Id"><button  id="checkout"  class="btn btn-primary btn-block d-flex justify-content-between mt-3" type="button"><span>$@cart.Items.Sum(i=>i.Product.Price).ToString("0.00")</span><span>Checkout<i class="fa fa-long-arrow-right ml-1"></i></span></button></a>
+                                
+                                    <script>
+                                         let input = document.getElementById('checkout');
+                                         input.addEventListener('click',()=>{
+                                             setTimeout(location.reload.bind(location), 5000);
+                                             return
+                                         });
+                                    </script>
+                                    
                                 </div>
                             </div>
   </div>

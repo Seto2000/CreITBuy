@@ -1,6 +1,7 @@
 ﻿using CreITBuy.Core.Contracts;
 using CreITBuy.Infrastructure.Data.Common;
 using CreITBuy.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using System;
@@ -36,18 +37,25 @@ namespace CreITBuy.Core.Services
             }
         }
 
-        public bool Checkout(string cartId)
+        public (bool isCheckedout, List<(byte[] file,string name)> files) Checkout(string cartId)
         {
             try
             {
-               var cart = repo.All<Cart>().Include(c=>c.Items).FirstOrDefault(c=>c.Id==cartId);
+                var cart = repo.All<Cart>()
+                    .Include(c=>c.Items).ThenInclude(i=>i.Product)
+                    .FirstOrDefault(c=>c.Id==cartId);
+                List<(byte[] file, string name)> files = new List<(byte[] file, string name)>();
+                foreach(var items in cart.Items)
+                {
+                    files.Add((items.Product.ProductArchive,items.Product.Name));
+                }
                 cart.Items.Clear();
                 repo.SaveChanges();
-                return true;
+                return (true,files);
             }
             catch 
             {
-                return false; 
+                return (false,null); 
             }
         }
 

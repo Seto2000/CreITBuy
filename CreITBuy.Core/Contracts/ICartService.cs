@@ -1,4 +1,5 @@
 ﻿using CreITBuy.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace CreITBuy.Core.Contracts
         Cart GetCartByUsername(string? name);
         bool AddProduct(string productId,string name);
         bool RemoveItem(string itemId, string name);
-        bool Checkout(string cartId);
+        (bool isCheckedout, List<(byte[] file, string name)> files) Checkout(string cartId);
     }
 }
