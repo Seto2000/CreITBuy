@@ -2,6 +2,7 @@
 using CreITBuy.Core.ViewModels.Product;
 using CreITBuy.Core.ViewModels.User;
 using CreITBuy.Infrastructure.Data.Models;
+using CreITBuy.Infrastructure.Data.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,11 @@ namespace CreITBuy.Controllers
             ViewData["controlerName"] = "Product";
             User user = await userManager.FindByNameAsync(User.Identity.Name);
             ViewData["User"] = user;
+            if (user.Job == Jobs.Client)
+            {
+                ViewData["Errors"]= new List<string>() { "You do not have permission to access this page!" };
+                return View("Error");
+            }
             return View();
         }
         [HttpPost]
@@ -69,12 +75,15 @@ namespace CreITBuy.Controllers
             else
             {
                 List<Product> products = new List<Product>();
-                List<string> tagsArr = new List<string>(tags.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+                List<string> tagsArr = new List<string>(tags.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries));
                 products = productService
                     .All()
                     .Where(p => p.Tags
                     .Split(", ")
-                    .Any(tag => tagsArr.Contains(tag)))
+                    .Any(tag => tagsArr.Contains(tag.ToLower())) ||
+                    tagsArr.Contains(p.Name.ToLower()) || 
+                    tagsArr.Contains(p.Author.UserName.ToLower()) ||
+                    p.Categories.Split(", ").Any(tag => tagsArr.Contains(tag.ToLower())))
                     .ToList();
 
                 ViewData["viewName"] = "Search";

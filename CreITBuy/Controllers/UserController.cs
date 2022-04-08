@@ -17,7 +17,6 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Windows.Input;
 
-#nullable disable
 namespace CreITBuy.Controllers
 {
     
@@ -87,7 +86,7 @@ namespace CreITBuy.Controllers
                         $"We hope you will have a great expiriance by joining our family." +
                         $"Have a great day!");
 
-                        return View("../User/ConfirmRegister");
+                        return View("ConfirmRegister");
                     
                 }
                 foreach (var error in result.Errors)
@@ -123,7 +122,7 @@ namespace CreITBuy.Controllers
                 }
                 if (!user.EmailConfirmed)
                 {
-                    return View("../User/ConfirmRegister");
+                    return View("ConfirmRegister");
                 }
                 
                 if (result.Succeeded)
@@ -147,6 +146,13 @@ namespace CreITBuy.Controllers
            
             userService.SignOut();
             return RedirectToAction("Index","Home");
+        }
+        public IActionResult ConfirmRegister()
+        {
+            ViewData["viewName"] = "Confirm Register";
+            ViewData["controlerName"] = "User";
+            ViewData["isAuthenticated"] = User.Identity.IsAuthenticated;
+            return View();
         }
     }
 }

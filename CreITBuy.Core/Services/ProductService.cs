@@ -89,7 +89,7 @@ namespace CreITBuy.Core.Services
 
         public IList<Product> All()
         {
-           return repo.All<Product>().Include(pi=>pi.ProductImages).ThenInclude(pi=>pi.Image).ToList();
+           return repo.All<Product>().Include(p=>p.Author).Include(pi=>pi.ProductImages).ThenInclude(pi=>pi.Image).ToList();
         }
 
         public Image FindImageById(string imageId)
@@ -99,7 +99,7 @@ namespace CreITBuy.Core.Services
 
         public Product FindProductById(string productId)
         {
-            return repo.All<Product>().Include(p=>p.ProductImages).ThenInclude(pi=>pi.Image).Where(p=>p.Id == productId).FirstOrDefault();
+            return repo.All<Product>().Include(p=>p.Author).Include(p=>p.ProductImages).ThenInclude(pi=>pi.Image).Where(p=>p.Id == productId).FirstOrDefault();
         }
 
         public (bool,string) Remove(string productId)
