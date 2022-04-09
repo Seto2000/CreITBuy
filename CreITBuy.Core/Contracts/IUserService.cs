@@ -12,7 +12,6 @@ namespace CreITBuy.Core.Contracts
 {
     public interface IUserService
     {
-        public string GetUsername(string userId);
         Task<(User, SignInResult)> LoginAsync(LoginViewModel Input);
         public Task<(User, string,IdentityResult)> RegisterAsync(IFormFile fileObj, RegisterViewModel Input);
         void SignOut();

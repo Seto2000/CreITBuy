@@ -7,15 +7,9 @@ using CreITBuy.Infrastructures.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 #nullable disable
@@ -23,33 +17,25 @@ namespace CreITBuy.Core.Services
 {
     public class UserService : IUserService
     {
-        private readonly IEmailSender emailSender;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
-        private readonly ApplicationDbContext repo;
-
+        private readonly IRepo repo;
         private readonly IValidationService validationService;
 
         public UserService(SignInManager<User> _signInManager,
 
-            IEmailSender _emailSender,
             UserManager<User> _userManager,
-            ApplicationDbContext _repo,
+            IRepo _repo,
             IValidationService _validationService
             )
         {
-            emailSender = _emailSender;
             userManager = _userManager;
             signInManager = _signInManager;
             repo = _repo;
             validationService = _validationService;
         }
 
-        public string GetUsername(string userId)
-        {
-            return repo.Users
-                .FirstOrDefault(u => u.Id == userId)?.UserName;
-        }
+        
         public void SignOut()
         {
             signInManager.SignOutAsync();
@@ -89,7 +75,7 @@ namespace CreITBuy.Core.Services
                 }
                 else
                 {
-                    error += ";Image is required!";
+                    error += "; Image is required!";
                 }
                 var user = new User
                 {
@@ -106,7 +92,11 @@ namespace CreITBuy.Core.Services
                 {
 
                     var code = await userManager.GenerateEmailConfirmationTokenAsync(user);
-                    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                    if(code != null)
+                    {
+                        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+                    }
                     return (user, code, result);
                 }
             }
@@ -121,15 +111,7 @@ namespace CreITBuy.Core.Services
 
         }
 
-        private string CalculateHash(string password)
-        {
-            byte[] passworArray = Encoding.UTF8.GetBytes(password);
-
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                return Convert.ToBase64String(sha256.ComputeHash(passworArray));
-            }
-        }
+        
 
         public (bool isValid, string errors) ValidateModel(RegisterViewModel input)
         {
