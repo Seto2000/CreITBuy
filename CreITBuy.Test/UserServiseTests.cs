@@ -81,8 +81,7 @@ namespace CreITBuy.Test
                 Job = Jobs.Developer,
                 EmailConfirmed = true,
                 LockoutEnabled = false,
-                LockoutEnd = System.DateTime.Now
-            }); ;
+            }); 
             UserManager<User> userManager1 = MockUserManager(users, true).Object;
             IUserService userService = new UserService(new SignInManager<User>(userManager1 ,new HttpContextAccessor(), new Mock<IUserClaimsPrincipalFactory<User>>().Object,null, new Mock<ILogger<SignInManager<User>>>().Object,null,null), userManager1, repo, new ValidationService());
             (User user, SignInResult result) = await userService.LoginAsync(new LoginViewModel() { Email = "setolan@abv.bg", Password = "Seto" });

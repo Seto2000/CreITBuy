@@ -76,7 +76,7 @@ namespace CreITBuy.Core.Services
         {
             try
             {
-                var item = repo.All<Item>().FirstOrDefault(p=>p.Id==itemId);
+                var item = repo.All<Item>().FirstOrDefault(p=>p.Id == itemId);
                 repo.All<Cart>().FirstOrDefault(c => c.User.UserName == name).Items.Remove(item);
                 repo.SaveChanges();
                 return true;

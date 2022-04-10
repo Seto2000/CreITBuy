@@ -26,11 +26,13 @@ namespace CreITBuy.Core.Services
             (bool isValid,string errors)=validationService.ValidateModel(model);
             if (images.Length > 5 || images.Length==0)
             {
-                return (false, "You have to add at least 1 and only 5 images!");
+                isValid=false;
+                errors += "; You have to add at least 1 and only 5 images!";
             }
             if (productArchive.Length == 0)
             {
-                return (false, "Please, upload your product archive in format zip or rar!");
+                isValid = false;
+                errors += "; Please, upload your product archive in format zip or rar!";
             }
             if (isValid)
             {

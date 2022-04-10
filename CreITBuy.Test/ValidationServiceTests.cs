@@ -49,6 +49,8 @@ namespace CreITBuy.Test
             Assert.IsFalse(isValid2);
             Assert.AreEqual(6, errors2.Split("; ").Length);
         }
+
+
         [Test]
         public void ValidateProductTest()
         {
@@ -58,7 +60,7 @@ namespace CreITBuy.Test
                 Description = "Lorum ipsum ne pilom korim bahim jasdj.",
                 PostedOn = DateTime.Now,
                 Tags = "bala, mssql, jsdjfj, kjdj",
-                Categories = "asfdafs, asfasf, asf, asf",
+                Categories = "asfdafs, asfasf, asf, adsf",
                 Price = 100
             };
             (bool isValid, string errors)= validationService.ValidateModel(model);

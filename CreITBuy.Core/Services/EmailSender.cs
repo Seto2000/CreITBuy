@@ -17,7 +17,7 @@ namespace CreITBuy.Core.Services
             _logger = logger;
         }
 
-        public AuthMessageSenderOptions Options { get; } //Set with Secret Manager.
+        public AuthMessageSenderOptions Options { get; } 
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
@@ -40,8 +40,7 @@ namespace CreITBuy.Core.Services
             };
             msg.AddTo(new EmailAddress(toEmail));
 
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
+            
             msg.SetClickTracking(false, false);
             var response = await client.SendEmailAsync(msg);
             _logger.LogInformation(response.IsSuccessStatusCode
