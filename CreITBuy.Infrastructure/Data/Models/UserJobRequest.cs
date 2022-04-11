@@ -10,10 +10,12 @@ namespace CreITBuy.Infrastructure.Data.Models
 {
     public class UserJobRequest
     {
+        [Key]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         [Required]
-        public string UserId { get; set; }
-        [ForeignKey(nameof(UserId))]
-        public User User { get; set; }
+        public string FromUserId { get; set; }
+        [ForeignKey(nameof(FromUserId))]
+        public User FromUser { get; set; }
         [Required]
         [StringLength(36)]
         public string JobRequestId { get; set; }

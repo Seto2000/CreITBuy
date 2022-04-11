@@ -30,7 +30,8 @@ builder.Services.AddScoped<IUserService,UserService>()
     .AddScoped<ICartService,CartService>()
     .AddScoped<IValidationService,ValidationService>()
     .AddScoped<IRepo, Repo>()
-    .AddScoped<IProductService,ProductService>();
+    .AddScoped<IProductService,ProductService>()
+    .AddScoped<IJobRequestService,JobRequestService>();
 builder.Services.AddMvc();
 builder.Services.Configure<IdentityOptions>(options =>
 {

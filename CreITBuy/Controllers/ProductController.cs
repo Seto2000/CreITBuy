@@ -12,8 +12,10 @@ namespace CreITBuy.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly IProductService productService;
-        public ProductController(UserManager<User> _userManager, IProductService _productService)
+        private readonly IUserService userService;
+        public ProductController(UserManager<User> _userManager, IProductService _productService,IUserService _userService)
         {
+            userService =   _userService;
             userManager = _userManager;
             productService = _productService;
         }
@@ -23,7 +25,7 @@ namespace CreITBuy.Controllers
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             ViewData["viewName"] = "Add";
             ViewData["controlerName"] = "Product";
-            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            User user = userService.FindUserByName(User.Identity.Name);
             ViewData["User"] = user;
             if (user.Job == Jobs.Client)
             {
@@ -69,7 +71,7 @@ namespace CreITBuy.Controllers
                 ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
                 ViewData["isSearching"] = false;
                 ViewData["Products"] = new List<Product>(productService.All());
-                User user = await userManager.FindByNameAsync(User.Identity.Name);
+                User user = userService.FindUserByName(User.Identity.Name);
                 ViewData["User"] = user;
             }
             else
@@ -91,7 +93,7 @@ namespace CreITBuy.Controllers
                 ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
                 ViewData["isSearching"] = true;
                 ViewData["Products"] = products;
-                User user = await userManager.FindByNameAsync(User.Identity.Name);
+                User user = userService.FindUserByName(User.Identity.Name);
                 ViewData["User"] = user;
             }
             
@@ -103,7 +105,7 @@ namespace CreITBuy.Controllers
             ViewData["viewName"] = "Details";
             ViewData["controlerName"] = "Products";
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
-            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            User user = userService.FindUserByName(User.Identity.Name);
             ViewData["User"] = user;
             Product product = productService.FindProductById(productId);
             ViewData["Product"] = product;

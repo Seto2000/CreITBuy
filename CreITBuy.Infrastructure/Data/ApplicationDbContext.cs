@@ -13,20 +13,16 @@ namespace CreITBuy.Infrastructures.Data
         }
         public DbSet<Image> Images { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
         public DbSet<JobRequest> JobRequests { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<Card> Cards { get; set; }
         public DbSet<UserJobRequest> UserJobRequests { get; set; }
-        DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<UserJobRequest>()
-                .HasKey(uj => new { uj.JobRequestId, uj.UserId });
 
             builder.Entity<ProductImage>()
                 .HasKey(pi => new {pi.ProductId, pi.ImageId });
@@ -40,6 +36,8 @@ namespace CreITBuy.Infrastructures.Data
                 .HasOne(pi=>pi.Image)
                 .WithMany(i=>i.ProductImages)
                 .HasForeignKey(pi=>pi.ImageId);
+
+            builder.Entity<UserJobRequest>().HasOne(x => x.JobRequest).WithMany().OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

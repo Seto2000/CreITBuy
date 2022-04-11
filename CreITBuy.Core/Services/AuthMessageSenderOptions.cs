@@ -11,4 +11,3 @@ namespace CreITBuy.Core.Services
         public string? SendGridKey { get; set; } = "My Key";
     }
 }
-

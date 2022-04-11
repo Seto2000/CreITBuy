@@ -16,5 +16,7 @@ namespace CreITBuy.Core.Contracts
         public Task<(User, string,IdentityResult)> RegisterAsync(IFormFile fileObj, RegisterViewModel Input);
         void SignOut();
         (bool isValid, string errors) ValidateModel(RegisterViewModel input);
+        public User FindUserByName(string name);
+        
     }
 }

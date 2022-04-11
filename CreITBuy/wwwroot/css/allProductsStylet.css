@@ -18,16 +18,18 @@
     border-radius: 4px;
     margin-left: 15px;
     margin-top: 15px;
-    width: calc(25% - 170px);
+    width: 367px;
 }
 ul {
-    display: block;
+    columns: auto;
+    display: flex;
     list-style-type: disc;
-    margin-block-start: 1em;
-    margin-block-end: 1em;
-    margin-inline-start: 0px;
+    margin-block-start: 4em;
+    margin-block-end: 2em;
+    margin-inline-start: -1px;
     margin-inline-end: 0px;
-    padding-inline-start: 40px;
+    padding-inline-start: 44px;
+    flex-wrap: wrap;
 }
 .gallerywide {
     margin-left: -15px;

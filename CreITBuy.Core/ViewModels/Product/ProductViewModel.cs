@@ -14,7 +14,7 @@ namespace CreITBuy.Core.ViewModels.Product
         public string Name { get; set; }
 
         [Required(ErrorMessage = "{0} is required!")]
-        [StringLength(1000, ErrorMessage ="{0} must be less then {1} characters!")]
+        [StringLength(3000, ErrorMessage ="{0} must be less then {1} characters!")]
         public string Description { get; set; }
         [Required(ErrorMessage = "{0} is required!")]
         [StringLength(100, ErrorMessage = "{0} must be less then {1} characters!")]

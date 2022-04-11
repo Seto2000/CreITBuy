@@ -15,6 +15,7 @@ namespace CreITBuy.Core.Services
         {
             Options = optionsAccessor.Value;
             _logger = logger;
+            Options = new AuthMessageSenderOptions();
         }
 
         public AuthMessageSenderOptions Options { get; } 

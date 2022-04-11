@@ -1,0 +1,45 @@
+﻿@using CreITBuy.Infrastructure.Data.Models
+                                
+@{
+    JobRequest item = (JobRequest)ViewData["Item"];
+}
+
+<div class="container bootdey" id="body">
+<div class="col-md-12">
+<section class="panel">
+    <form>
+        <h1>Job Request</h1>
+        <hr id="border">
+      <div class="panel-body">
+          <div class="col-md-7">
+            
+              <div class="pro-img-list">
+                 
+                  </div>
+          </div>
+          <div class="col-md-6">
+              <h4 class="pro-d-title">
+                  <a id="product-details-name">
+                  <label>Theme:</label>
+                      @(item.Theme)
+                      </a>
+                      <div style="    margin-top: -44px;">
+                      <a id="author-picture-by">From:</a><img class="brand-image img-circle" id="author-picture" src="@("data:image/jpeg/;base64," + Convert.ToBase64String((byte[])item.FromUserJobRequest.FromUser.Image))" alt=""><a href="/User/Details?authorId=@item.FromUserJobRequest.FromUser.Id"  id="author-name">@item.FromUserJobRequest.FromUser.UserName</a>
+                  </div>
+                  
+                  <hr id="border">
+              </h4>
+              <a id="product-details-name" ><label>Description:</label></a>
+              <p>
+                  @(item.Description)
+                  
+              </p>
+              </div>
+              </div>
+              </form>
+  </section>
+  </div>
+  <br />
+  <br />
+  </div>
+                       

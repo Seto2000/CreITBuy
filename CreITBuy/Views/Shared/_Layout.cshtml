@@ -88,6 +88,44 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Navbar Search -->
                 @if (ViewData["isAuthenticated"]!=null && (bool)ViewData["IsAuthenticated"])
                 {
+                    <li class="nav-item dropdown" style="font-size: 20px;
+    margin-top: -2px;">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-comments" style="font-size: 20.5px;"></i>
+                    <span class="badge badge-danger navbar-badge" style="font-size: 10px;">@user.JobRequests.Count</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+
+                            @if (user.JobRequests.Count > 0)
+                            {
+                                
+                            
+                            foreach(var item in user.JobRequests)
+                            {
+                                
+                           
+
+                                 <a href="/../JobRequest/Details?requestId=@item.Id" class="dropdown-item">
+                             
+                             <div class="media">
+                             <img src="@("data:image/png;base64," + Convert.ToBase64String((byte[])item.FromUserJobRequest.FromUser.Image))" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                             <div class="media-body">
+                             <h3 class="dropdown-item-title">
+                             @item.FromUserJobRequest.FromUser.UserName
+                             </h3>
+                             <p class="text-sm">@item.Theme</p>
+                         </div>
+                             </div>
+                         </a>
+                         <div style="    display: flex;">
+                             <p class="text-sm text-muted" style="margin-left: 10px;"><i class="far fa-clock mr-1"></i> @item.Date.ToString("dd/MM/yyyy")</p>
+                             <a href="/../JobRequest/Remove?requestId=@item.Id" style="margin-left: 20px;"><i class="fa fa-trash-o ml-3 text-black-50"></i></a>
+                             </div>
+                             
+                             
+                         }
+                    }
+                    </li>
                          <li class="nav-item">
         <a class="nav-link" data-widget="navbar-search" href="#" role="button">
           <i class="fas fa-search"></i>
@@ -205,6 +243,32 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <i b-undt220x7a="" class="fas fa-sign-out-alt"></i>
                                         <p b-undt220x7a="">
                                             &nbsp;&nbsp;&nbsp; Logout
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a b-undt220x7a="" href="../Cart/MyCart" class="nav-link" style="
+                                    background-color: #d02328;
+                                    color: white;">
+                                    <div id="nav-items-text">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <p b-undt220x7a="">
+                                            &nbsp;&nbsp;&nbsp; My Cart
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a b-undt220x7a="" href="/../User/Details?authorId=@user.Id" class="nav-link" style="
+                                    background-color: #d02328;
+                                    color: white;">
+                                    <div id="nav-items-text">
+                                        <i class="fas fa-user"></i>
+                                        <p b-undt220x7a="">
+                                            &nbsp;&nbsp;&nbsp; Profile
                                         </p>
                                     </div>
                                 </a>

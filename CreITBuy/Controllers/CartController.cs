@@ -11,11 +11,12 @@ namespace CreITBuy.Controllers
     public class CartController:Controller
     {
         private readonly ICartService cartService;
-        private readonly UserManager<User> userManager;
-        public CartController(ICartService _cartService,UserManager<User> _userManager)
+        private readonly IUserService userService;
+        public CartController(ICartService _cartService,
+            IUserService _userService)
         {
+            userService = _userService;
             cartService = _cartService;
-            userManager = _userManager;
         }
         [Authorize]
         public async Task<IActionResult> MyCart()
@@ -23,7 +24,7 @@ namespace CreITBuy.Controllers
             ViewData["viewName"] = "MyCart";
             ViewData["controlerName"] = "Cart";
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
-            User user = await userManager.FindByNameAsync(User.Identity.Name);
+            User user = userService.FindUserByName(User.Identity.Name);
             ViewData["User"] = user;
             Cart cart = cartService.GetCartByUsername(User.Identity.Name);
             ViewData["Cart"]=cart;

@@ -19,7 +19,7 @@ namespace CreITBuy.Infrastructure.Data.Models
         [ForeignKey(nameof(AuthorId))]
         public User Author { get; set; }
         [Required]
-        [StringLength(1000)]
+        [StringLength(3000)]
         public string Description { get; set; }
         [Required]
         public byte[] ProductArchive { get; set; }

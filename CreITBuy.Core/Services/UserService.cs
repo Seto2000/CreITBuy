@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
@@ -110,8 +111,11 @@ namespace CreITBuy.Core.Services
             
 
         }
+        public User FindUserByName(string name)
+        {
+            return repo.All<User>().Include(u => u.JobRequests).ThenInclude(j => j.FromUserJobRequest).ThenInclude(u => u.FromUser).SingleOrDefault(x => x.UserName == name);
+        }
 
-        
 
         public (bool isValid, string errors) ValidateModel(RegisterViewModel input)
         {

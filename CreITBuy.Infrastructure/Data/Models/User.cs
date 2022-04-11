@@ -25,9 +25,8 @@ namespace CreITBuy.Infrastructure.Data.Models
         [Required]
         [ForeignKey(nameof(CartId))]
         public Cart Cart { get; set; }
-        public IList<Notification> Notifications { get; set; } = new List<Notification>();
         public IList<Card> Cards { get; set; } = new List<Card>();
-        public IList<UserJobRequest> UserJobRequests { get; set; } = new List<UserJobRequest>();
+        public IList<JobRequest> JobRequests{ get; set; } = new List<JobRequest>();
         public IList<Product> Products { get; set; } = new List<Product>();
 
     }

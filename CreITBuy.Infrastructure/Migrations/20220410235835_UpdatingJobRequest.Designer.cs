@@ -4,6 +4,7 @@ using CreITBuy.Infrastructures.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreITBuy.Infrastructures.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220410235835_UpdatingJobRequest")]
+    partial class UpdatingJobRequest
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,6 +142,31 @@ namespace CreITBuy.Infrastructures.Migrations
                     b.ToTable("JobRequests");
                 });
 
+            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Notification", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Product", b =>
                 {
                     b.Property<string>("Id")
@@ -219,7 +246,8 @@ namespace CreITBuy.Infrastructures.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FromUserId");
+                    b.HasIndex("FromUserId")
+                        .IsUnique();
 
                     b.HasIndex("JobRequestId");
 
@@ -496,12 +524,23 @@ namespace CreITBuy.Infrastructures.Migrations
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.JobRequest", b =>
                 {
                     b.HasOne("CreITBuy.Infrastructure.Data.Models.User", "ToUser")
-                        .WithMany("JobRequests")
+                        .WithMany()
                         .HasForeignKey("ToUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ToUser");
+                });
+
+            modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Notification", b =>
+                {
+                    b.HasOne("CreITBuy.Infrastructure.Data.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.Product", b =>
@@ -537,8 +576,8 @@ namespace CreITBuy.Infrastructures.Migrations
             modelBuilder.Entity("CreITBuy.Infrastructure.Data.Models.UserJobRequest", b =>
                 {
                     b.HasOne("CreITBuy.Infrastructure.Data.Models.User", "FromUser")
-                        .WithMany()
-                        .HasForeignKey("FromUserId")
+                        .WithOne("UserJobRequest")
+                        .HasForeignKey("CreITBuy.Infrastructure.Data.Models.UserJobRequest", "FromUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -646,9 +685,11 @@ namespace CreITBuy.Infrastructures.Migrations
                 {
                     b.Navigation("Cards");
 
-                    b.Navigation("JobRequests");
+                    b.Navigation("Notifications");
 
                     b.Navigation("Products");
+
+                    b.Navigation("UserJobRequest");
                 });
 #pragma warning restore 612, 618
         }

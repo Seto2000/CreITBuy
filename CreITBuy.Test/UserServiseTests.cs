@@ -8,10 +8,12 @@ using CreITBuy.Infrastructures.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,19 +24,33 @@ namespace CreITBuy.Test
 {
     public class UserServiceTests
     {
-        private  IUserService userService;
-        private UserManager<User> userManager;
+        private ServiceProvider serviceProvider;
+        private ValidationService validationService;
+        private List<Product> products;
+        private IUserService userService;
+        private InMemoryDbContext dbContext;
+        private IRepo repo;
         private List<User> users;
-        private Repo repo;
-
+        private UserManager<User> userManager;
         [SetUp]
         public void Setup()
         {
-            List<User> _users = new List<User>();
-            users = _users;
 
-            repo =  new Repo(new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>()));
-            this.userService = userService;
+            dbContext = new InMemoryDbContext();
+            var serviceCollection = new ServiceCollection();
+
+            serviceProvider = serviceCollection
+               .AddSingleton(sp => dbContext.CreateContext())
+               .AddSingleton<IRepo, Repo>()
+               .AddSingleton<IUserService, UserService>()
+               .BuildServiceProvider();
+
+            var repo = serviceProvider.GetService<IRepo>();
+
+            this.repo = repo;
+            validationService = new ValidationService();
+            users = new List<User>();
+            userService = new UserService(null,userManager,repo,validationService);
 
         }
         public static Mock<UserManager<TUser>> MockUserManager<TUser>(List<TUser> ls,bool isTrue) where TUser : class
@@ -160,6 +176,43 @@ namespace CreITBuy.Test
             };
             Assert.IsFalse(userService.ValidateModel(model2).isValid);
             Assert.AreEqual(6,userService.ValidateModel(model2).errors.Split("; ").Length);
+        }
+        [Test]
+        public void FIndUserByNameTests()
+        {
+            var jobReq = new JobRequest()
+            {
+                Date = System.DateTime.Now,
+                Description = "asfnaonfnasfn ansfnaofn on oanf onf anon oan oan o n",
+
+                Theme = "adgfadg"
+            };
+            jobReq.FromUserJobRequest = new UserJobRequest()
+            {
+                FromUser = new User(),
+                JobRequestId = jobReq.Id,
+            };
+            repo.Add<User>(new User()
+            {
+                UserName = "Berbatov2000",
+                LiveIn = "Bulgaria, Sofia",
+                PasswordHash = "AQAAAAEAACcQAAAAEI94JA2QBE2Eb0avL0VafpCfd7n0eubhaNSmBf4Y5MoAetMwMoVot8Pmj9aHM6u1/g==",
+                Email = "setolan@abv.bg",
+                NormalizedEmail = "SETOLAN@ABV.BG",
+                Job = Jobs.Developer,
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                JobRequests = new List<JobRequest>() {jobReq},
+                
+            
+            });
+            repo.SaveChanges();
+            User user = userService.FindUserByName("Berbatov2000");
+
+            Assert.IsNotNull(user);
+            Assert.IsNotNull(user.JobRequests);
+            Assert.IsNotNull(user.JobRequests.FirstOrDefault().FromUserJobRequest.FromUser);
+            
         }
     }
 }
