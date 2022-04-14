@@ -60,7 +60,9 @@ namespace CreITBuy.Controllers
             ViewData["IsAuthenticated"] = HttpContext.User.Identity.IsAuthenticated;
             User user = userService.FindUserByName(User.Identity.Name);
             ViewData["User"]=user;
-            
+            ViewData["viewName"] = "Details";
+            ViewData["controlerName"] = "User";
+
             ViewData["Products"] = productService.All().OrderByDescending(p=>p.PostedOn).Take(4).ToList();
             return View();
         }
